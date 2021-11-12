@@ -4,6 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
 import 'package:flutter/rendering.dart';
+import 'package:intl/intl.dart';
 import 'classepage.dart';
 import 'assignment.dart';
 import 'folder.dart';
@@ -28,9 +29,11 @@ class AppName extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var lw = MediaQuery.of(context).size.width;
+    var lh = MediaQuery.of(context).size.height;
     return Container(
         alignment: Alignment.centerLeft,
-        padding: const EdgeInsets.fromLTRB(40, 40, 225, 20),
+        padding: EdgeInsets.fromLTRB(lw / 10, lh / 20, 0, lh / 40),
         color: Colors.white,
         width: double.infinity,
         height: 100.0,
@@ -45,18 +48,20 @@ class HelloTag extends StatelessWidget {
   Widget build(BuildContext context) {
     const _username = 'Piyush';
     const _semester = 5;
+    var lw = MediaQuery.of(context).size.width;
+    var lh = MediaQuery.of(context).size.height;
     return Container(
-        padding: const EdgeInsets.fromLTRB(40, 20, 20, 20),
+        padding: EdgeInsets.fromLTRB(lw / 10, lw / 20, lw / 20, lw / 20),
         color: Colors.indigo[800],
         width: double.infinity,
-        height: 100.0,
+        height: lh / 8,
         child: Column(
-          children: const [
+          children: [
             Align(
               alignment: Alignment.centerLeft,
               child: Text(
                 'Hello $_username !',
-                style: TextStyle(fontSize: 28.0, color: Colors.white),
+                style: TextStyle(fontSize: lh / 30, color: Colors.white),
               ),
             ),
             SizedBox(
@@ -67,7 +72,7 @@ class HelloTag extends StatelessWidget {
               child: Text(
                 'Sem $_semester',
                 style: TextStyle(
-                    fontSize: 18.0,
+                    fontSize: lh / 50,
                     color: Colors.white,
                     fontWeight: FontWeight.w700),
               ),
@@ -82,44 +87,46 @@ class DateTag extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    DateTime now = DateTime.now();
-    DateTime date = DateTime(now.year, now.month, now.day);
-    var _datestr = date.toString().substring(0, 10);
+    var _datestr = DateFormat.yMMMd().format(DateTime.now());
+    var lw = MediaQuery.of(context).size.width;
+    var lh = MediaQuery.of(context).size.height;
     return Container(
         alignment: Alignment.bottomLeft,
-        padding: const EdgeInsets.fromLTRB(40, 30, 0, 0),
+        padding: EdgeInsets.fromLTRB(lw / 10, lh / 25, 0, 0),
         child: Text(
           _datestr,
           style: TextStyle(
-              fontSize: 16.0, color: Colors.black, fontWeight: FontWeight.w600),
+              fontSize: lh / 50,
+              color: Colors.black,
+              fontWeight: FontWeight.w600),
         ));
   }
 }
 
 class MyClasses extends StatelessWidget {
   const MyClasses({Key? key}) : super(key: key);
-
   @override
   Widget build(BuildContext context) {
+    var lw = MediaQuery.of(context).size.width;
+    var lh = MediaQuery.of(context).size.height;
     return Card(
       color: Colors.white60,
-      margin: EdgeInsets.fromLTRB(40, 20, 40, 10),
+      margin: EdgeInsets.fromLTRB(lw / 10, lh / 40, lw / 10, lh / 80),
       child: InkWell(
-        hoverColor: Colors.yellowAccent,
         splashColor: Colors.blue,
         onTap: () {
           Navigator.push(
               context, MaterialPageRoute(builder: (context) => ClassPage()));
         },
-        child: const SizedBox(
+        child: SizedBox(
           width: double.infinity,
-          height: 140,
+          height: lh / 6,
           child: Padding(
             padding: EdgeInsets.only(left: 14.0, top: 20.0),
             child: Text(
               'My Classes',
               style: TextStyle(
-                  fontSize: 20.0,
+                  fontSize: lh / 40,
                   color: Colors.black,
                   fontWeight: FontWeight.w600),
             ),
@@ -135,16 +142,17 @@ class AssignmentFolder extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var lw = MediaQuery.of(context).size.width;
+    var lh = MediaQuery.of(context).size.height;
     return Container(
-      margin: EdgeInsets.fromLTRB(40, 10, 40, 20),
+      margin: EdgeInsets.fromLTRB(lw / 10, lh / 80, lw / 10, lh / 80),
       child: Row(
         children: [
           Expanded(
             child: Card(
               color: Colors.white60,
-              margin: EdgeInsets.fromLTRB(0, 0, 10, 0),
+              margin: EdgeInsets.fromLTRB(0, 0, lw / 40, 0),
               child: InkWell(
-                hoverColor: Colors.yellowAccent,
                 splashColor: Colors.blue,
                 onTap: () {
                   Navigator.push(
@@ -152,15 +160,15 @@ class AssignmentFolder extends StatelessWidget {
                       MaterialPageRoute(
                           builder: (context) => AssignmentPage()));
                 },
-                child: const SizedBox(
-                  height: 80,
+                child: SizedBox(
+                  height: lh / 10,
                   child: Padding(
                     padding: EdgeInsets.all(10),
                     child: Center(
                       child: Text(
                         'Assignments',
                         style: TextStyle(
-                            fontSize: 16.0,
+                            fontSize: lh / 50,
                             color: Colors.black,
                             fontWeight: FontWeight.w600),
                       ),
@@ -175,21 +183,20 @@ class AssignmentFolder extends StatelessWidget {
               color: Colors.white60,
               margin: EdgeInsets.fromLTRB(0, 0, 0, 0),
               child: InkWell(
-                hoverColor: Colors.yellowAccent,
                 splashColor: Colors.blue,
                 onTap: () {
                   Navigator.push(context,
                       MaterialPageRoute(builder: (context) => FolderPage()));
                 },
-                child: const SizedBox(
-                  height: 80,
+                child: SizedBox(
+                  height: lh / 10,
                   child: Padding(
                     padding: EdgeInsets.all(10),
                     child: Center(
                       child: Text(
                         'Folders',
                         style: TextStyle(
-                            fontSize: 16.0,
+                            fontSize: lh / 50,
                             color: Colors.black,
                             fontWeight: FontWeight.w600),
                       ),
@@ -210,20 +217,22 @@ class ToDoBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var lw = MediaQuery.of(context).size.width;
+    var lh = MediaQuery.of(context).size.height;
     return Card(
       color: Colors.white60,
-      margin: EdgeInsets.fromLTRB(40, 20, 40, 10),
+      margin: EdgeInsets.fromLTRB(lw / 10, lh / 40, lw / 10, lh / 80),
       child: SizedBox(
         width: double.infinity,
-        height: 70,
+        height: lh / 11,
         child: Row(
           children: [
             Padding(
-              padding: EdgeInsets.fromLTRB(20, 20, 180, 20),
+              padding: EdgeInsets.fromLTRB(lw / 20, lh / 40, lw / 2.3, lh / 40),
               child: Text(
                 'To-Do',
                 style: TextStyle(
-                    fontSize: 20.0,
+                    fontSize: lh / 40,
                     color: Colors.black,
                     fontWeight: FontWeight.w600),
               ),
@@ -233,7 +242,7 @@ class ToDoBar extends StatelessWidget {
                 child: Icon(
                   Icons.add,
                   color: Colors.black,
-                  size: 50,
+                  size: lh / 15,
                 ),
                 onPressed: () {
                   Navigator.push(context,
@@ -251,27 +260,28 @@ class BottomNavBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var lh = MediaQuery.of(context).size.height;
     return BottomNavigationBar(
       backgroundColor: Colors.grey,
-      items: const <BottomNavigationBarItem>[
+      items: <BottomNavigationBarItem>[
         BottomNavigationBarItem(
           icon: Icon(
             Icons.date_range,
-            size: 30,
+            size: lh / 25,
           ),
           label: 'Calender',
         ),
         BottomNavigationBarItem(
           icon: Icon(
             Icons.home_filled,
-            size: 30,
+            size: lh / 25,
           ),
           label: 'Home',
         ),
         BottomNavigationBarItem(
           icon: Icon(
             Icons.person,
-            size: 30,
+            size: lh / 25,
           ),
           label: 'Profile',
         ),
@@ -289,6 +299,7 @@ class HomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var lh = MediaQuery.of(context).size.height;
     return Scaffold(
       backgroundColor: Colors.white,
       // ignore: prefer_const_literals_to_create_immutables
@@ -307,7 +318,7 @@ class HomePage extends StatelessWidget {
         ),
         ToDoBar(),
       ]),
-      bottomNavigationBar: SizedBox(height: 80, child: BottomNavBar()),
+      bottomNavigationBar: SizedBox(height: lh / 10, child: BottomNavBar()),
     );
   }
 }

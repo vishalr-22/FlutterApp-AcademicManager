@@ -28,13 +28,17 @@ class AssignmentPage extends StatelessWidget {
             Row(
               children: [
                 Container(
-                  padding: new EdgeInsets.fromLTRB(15, 30, 25, 10),
-                  child: Icon(
-                    Icons.keyboard_arrow_left_rounded,
-                    color: Colors.white,
-                    size: 40,
-                  ),
-                ),
+                    padding: const EdgeInsets.fromLTRB(30, 30, 30, 10),
+                    child: IconButton(
+                      icon: const Icon(
+                        Icons.keyboard_arrow_left_outlined,
+                        size: 40,
+                      ),
+                      color: Colors.white,
+                      onPressed: () {
+                        Navigator.pop(context);
+                      },
+                    )),
                 Container(
                   padding: new EdgeInsets.fromLTRB(30, 30, 30, 10),
                   child: Text(

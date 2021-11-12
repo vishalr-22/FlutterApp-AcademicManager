@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
+import 'addclass.dart';
 
 void main() {
-  runApp(ClassPage());
+  runApp(const ClassPage());
 }
 
 class ClassPage extends StatelessWidget {
+  const ClassPage({Key? key}) : super(key: key);
+
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
@@ -12,7 +15,10 @@ class ClassPage extends StatelessWidget {
     return MaterialApp(
         home: Scaffold(
       floatingActionButton: FloatingActionButton(
-        onPressed: () {},
+        onPressed: () {
+          Navigator.push(context,
+              MaterialPageRoute(builder: (context) => const AddClass()));
+        },
         child: const Icon(
           Icons.add,
           color: Colors.black,
@@ -22,30 +28,36 @@ class ClassPage extends StatelessWidget {
       ),
       body: Container(
         color: Colors.teal,
-        padding: new EdgeInsets.all(25),
+        padding: const EdgeInsets.all(25),
         child: Column(
           children: [
             Row(
               children: [
                 Container(
-                  padding: new EdgeInsets.fromLTRB(17, 30, 30, 10),
-                  child: Icon(
-                    Icons.keyboard_arrow_left_rounded,
-                    color: Colors.white,
-                    size: 40,
-                  ),
-                ),
+                    padding: const EdgeInsets.fromLTRB(30, 30, 30, 10),
+                    child: IconButton(
+                      icon: const Icon(
+                        Icons.keyboard_arrow_left_outlined,
+                        size: 40,
+                      ),
+                      color: Colors.white,
+                      onPressed: () {
+                        Navigator.pop(context);
+                      },
+                    )),
                 Container(
-                  padding: new EdgeInsets.fromLTRB(30, 30, 30, 10),
+                  padding: const EdgeInsets.fromLTRB(30, 30, 30, 10),
+                  // ignore: prefer_const_constructors
                   child: Text(
                     "My Classes",
-                    style: TextStyle(color: Colors.white, fontSize: 25),
+                    style: const TextStyle(color: Colors.white, fontSize: 25),
                   ),
                 ),
               ],
             ),
             Container(
-              padding: new EdgeInsets.fromLTRB(0, 10, 0, 40),
+              padding: const EdgeInsets.fromLTRB(0, 10, 0, 40),
+              // ignore: prefer_const_constructors
               child: Divider(
                 color: Colors.white,
                 thickness: 2,
@@ -65,11 +77,13 @@ class ClassPage extends StatelessWidget {
   }
 }
 
+// ignore: use_key_in_widget_constructors
 class Divide extends StatelessWidget {
+  @override
   Widget build(BuildContext context) {
     return (Container(
-      padding: new EdgeInsets.fromLTRB(15, 10, 15, 20),
-      child: Divider(
+      padding: const EdgeInsets.fromLTRB(15, 10, 15, 20),
+      child: const Divider(
         color: Colors.white,
         thickness: 2,
       ),
@@ -77,12 +91,14 @@ class Divide extends StatelessWidget {
   }
 }
 
+// ignore: use_key_in_widget_constructors
 class Subject extends StatelessWidget {
+  @override
   Widget build(BuildContext context) {
     return (Row(mainAxisAlignment: MainAxisAlignment.center, children: [
       Container(
         margin: const EdgeInsets.only(left: 0.0, right: 10.0),
-        padding: new EdgeInsets.fromLTRB(0, 7, 0, 7),
+        padding: const EdgeInsets.fromLTRB(0, 7, 0, 7),
         width: 210,
         decoration: BoxDecoration(
             // border: Border(left: BorderSide(color: Colors.black, width:3)),
@@ -91,8 +107,8 @@ class Subject extends StatelessWidget {
         child: Column(
           children: [
             Container(
-              padding: new EdgeInsets.fromLTRB(10, 0, 0, 0),
-              child: Align(
+              padding: const EdgeInsets.fromLTRB(10, 0, 0, 0),
+              child: const Align(
                 alignment: Alignment.centerLeft,
                 child: Text(
                   "Subject-1",
@@ -104,7 +120,7 @@ class Subject extends StatelessWidget {
               ),
             ),
             Container(
-                padding: new EdgeInsets.fromLTRB(10, 0, 0, 0),
+                padding: const EdgeInsets.fromLTRB(10, 0, 0, 0),
                 child: Align(
                   alignment: Alignment.centerLeft,
                   child: Text(
@@ -135,7 +151,7 @@ class Subject extends StatelessWidget {
               borderRadius: BorderRadius.circular(5)),
           margin: const EdgeInsets.only(left: 10.0, right: 0.0),
           padding: new EdgeInsets.fromLTRB(15, 17, 15, 17),
-          child: Icon(
+          child: const Icon(
             Icons.edit,
             color: Colors.white,
           )),
