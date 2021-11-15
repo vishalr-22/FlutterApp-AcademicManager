@@ -1,11 +1,10 @@
-// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
+// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables, must_be_immutable, use_key_in_widget_constructors, prefer_const_constructors_in_immutables, empty_constructor_bodies, avoid_print
 
 import 'package:flutter/material.dart';
 import 'add_task_screen.dart';
-
-void main() {
-  runApp(const TodoPage());
-}
+import 'models/task.dart';
+import 'widgets.dart/task_tile.dart';
+import 'widgets.dart/task_list.dart';
 
 class TodoPage extends StatefulWidget {
   const TodoPage({Key? key}) : super(key: key);
@@ -15,6 +14,11 @@ class TodoPage extends StatefulWidget {
 }
 
 class _TodoPageState extends State<TodoPage> {
+  List<Task> tasks = [
+    Task(name: 'Buy Milk'),
+    Task(name: 'Buy eggs'),
+    Task(name: 'Buy bread'),
+  ];
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -44,13 +48,13 @@ class _TodoPageState extends State<TodoPage> {
             thickness: 3,
             indent: 20,
             endIndent: 20,
-            color: Colors.blueAccent,
+            color: Colors.lightBlueAccent,
           ),
           SizedBox(height: 20),
           Expanded(
             child: Container(
               padding: EdgeInsets.fromLTRB(0, 0, 0, 10),
-              child: TaskList(),
+              child: TaskList(tasks: tasks),
             ),
           )
         ],
@@ -58,9 +62,20 @@ class _TodoPageState extends State<TodoPage> {
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           showModalBottomSheet(
-              context: context, builder: (context) => AddTaskScreen());
+              context: context,
+              isScrollControlled: true,
+              builder: (context) => SingleChildScrollView(
+                  child: Container(
+                      padding: EdgeInsets.only(
+                          bottom: MediaQuery.of(context).viewInsets.bottom),
+                      child: AddTaskScreen((newTaskTitle) {
+                        setState(() {
+                          tasks.add(Task(name: newTaskTitle));
+                        });
+                        Navigator.pop(context);
+                      }))));
         },
-        backgroundColor: Color(0xFF208181),
+        backgroundColor: Colors.lightBlueAccent,
         child: Icon(
           Icons.add,
           color: Colors.white,
@@ -70,120 +85,6 @@ class _TodoPageState extends State<TodoPage> {
     );
   }
 }
-
-class TaskList extends StatelessWidget {
-  const TaskList({
-    Key? key,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return ListView(
-      // padding: EdgeInsets.symmetric(horizontal: 20),
-      children: [
-        TaskTile(),
-        TaskTile(),
-        TaskTile(),
-      ],
-    );
-  }
-}
-
-class TaskTile extends StatelessWidget {
-  const TaskTile({
-    Key? key,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return ListTile(
-      leading: Checkbox(
-        value: false,
-        onChanged: (bool? value) {},
-      ),
-      title: Text(
-        'Assignment',
-        style: TextStyle(fontSize: 20, color: Colors.black),
-      ),
-    );
-  }
-}
-
-// class ToDoLsit extends StatefulWidget {
-//   const ToDoLsit({Key? key}) : super(key: key);
-
-//   @override
-//   _ToDoLsitState createState() => _ToDoLsitState();
-// }
-
-// class _ToDoLsitState extends State<ToDoLsit> {
-//   Icon circle = Icon(Icons.circle_outlined, size: 40, color: Color(0xFFFFA8A8));
-
-//   int done = 0;
-//   @override
-//   Widget build(BuildContext context) {
-//     return Column(
-//       children: [
-//         Divider(
-//           height: 20,
-//           thickness: 3,
-//           indent: 20,
-//           endIndent: 20,
-//           color: Colors.grey,
-//         ),
-//         SizedBox(
-//           height: 10,
-//         ),
-//         Expanded(
-//           child: ListView(
-//             // padding: EdgeInsets.symmetric(horizontal: 20),
-//             children: [
-//               ListTile(
-//                 leading: Checkbox(value: false, onChanged: (bool? value) {}),
-//                 title: Text(
-//                   'Assignment1',
-//                   style: TextStyle(fontSize: 22, color: Colors.black),
-//                 ),
-//               )
-//             ],
-//           ),
-//         )
-
-//         // Row(
-//         //   children: [
-//         //     Expanded(
-//         //       flex: 1,
-//         //       child: IconButton(
-//         //         onPressed: () {
-//         //           setState(() {
-//         //             if (done == 0) {
-//         //               circle = Icon(Icons.circle_outlined,
-//         //                   size: 40, color: Color(0xFFFFA8A8));
-//         //               done = 1;
-//         //             } else {
-//         //               circle = Icon(Icons.check_circle_outline_rounded,
-//         //                   size: 40, color: Color(0xFFFFA8A8));
-//         //               done = 0;
-//         //             }
-//         //           });
-//         //         },
-//         //         splashRadius: 1,
-//         //         icon: circle,
-//         //       ),
-//         //     ),
-//         //     Expanded(
-//         //       flex: 5,
-//         //       child: Text(
-//         //         'Assignment1',
-//         //         style: TextStyle(fontSize: 22, color: Colors.black),
-//         //       ),
-//         //     )
-//         //   ],
-//         // ),
-//       ],
-//     );
-//   }
-// }
 
 class BottomNavBar extends StatelessWidget {
   const BottomNavBar({Key? key}) : super(key: key);
