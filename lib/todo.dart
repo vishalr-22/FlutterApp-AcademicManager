@@ -2,23 +2,11 @@
 
 import 'package:flutter/material.dart';
 import 'add_task_screen.dart';
-import 'models/task.dart';
-import 'widgets.dart/task_tile.dart';
+import 'package:provider/provider.dart';
 import 'widgets.dart/task_list.dart';
+import 'package:acadmt/models/task_data.dart';
 
-class TodoPage extends StatefulWidget {
-  const TodoPage({Key? key}) : super(key: key);
-
-  @override
-  State<TodoPage> createState() => _TodoPageState();
-}
-
-class _TodoPageState extends State<TodoPage> {
-  List<Task> tasks = [
-    Task(name: 'Buy Milk'),
-    Task(name: 'Buy eggs'),
-    Task(name: 'Buy bread'),
-  ];
+class TodoPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -54,7 +42,7 @@ class _TodoPageState extends State<TodoPage> {
           Expanded(
             child: Container(
               padding: EdgeInsets.fromLTRB(0, 0, 0, 10),
-              child: TaskList(tasks: tasks),
+              child: TaskList(),
             ),
           )
         ],
@@ -68,12 +56,7 @@ class _TodoPageState extends State<TodoPage> {
                   child: Container(
                       padding: EdgeInsets.only(
                           bottom: MediaQuery.of(context).viewInsets.bottom),
-                      child: AddTaskScreen((newTaskTitle) {
-                        setState(() {
-                          tasks.add(Task(name: newTaskTitle));
-                        });
-                        Navigator.pop(context);
-                      }))));
+                      child: AddTaskScreen())));
         },
         backgroundColor: Colors.lightBlueAccent,
         child: Icon(

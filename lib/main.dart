@@ -9,6 +9,8 @@ import 'classepage.dart';
 import 'assignment.dart';
 import 'folder.dart';
 import 'todo.dart';
+import 'package:provider/provider.dart';
+import 'package:acadmt/models/task_data.dart';
 
 void main() {
   runApp(MyApp());
@@ -18,8 +20,11 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      home: const HomePage(title: 'AcadM'),
+    return MultiProvider(
+      providers: [ChangeNotifierProvider(create: (_) => TaskData())],
+      child: MaterialApp(
+        home: const HomePage(title: 'AcadM'),
+      ),
     );
   }
 }
