@@ -1,6 +1,11 @@
 import 'package:flutter/material.dart';
 
-import 'package:acadmt/folder_help/folder_list.dart';
+class Folder {
+  String name;
+  Icon icon;
+
+  Folder({required this.name, required this.icon});
+}
 
 class Utils {
   static List<Folder> getMockedFolders() {
@@ -11,7 +16,6 @@ class Utils {
       Folder(name: 'SE', icon: Icon(Icons.folder)),
       Folder(name: 'MERN', icon: Icon(Icons.folder)),
       Folder(name: 'FLUTTER', icon: Icon(Icons.folder)),
-      Folder(name: 'SC', icon: Icon(Icons.folder)),
     ];
   }
 }

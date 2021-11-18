@@ -1,14 +1,21 @@
 // ignore_for_file: prefer_typing_uninitialized_variables
 
 import 'package:flutter/foundation.dart';
-import 'package:acadmt/models/task.dart';
+
+class Task {
+  final String name;
+  bool isDone;
+  Task({required this.name, this.isDone = false});
+
+  void toggleDone() {
+    isDone = !isDone;
+  }
+}
 
 // ignore: non_constant_identifier_names
 class TaskData extends ChangeNotifier {
   List<Task> tasks = [
-    Task(name: 'Buy Milk'),
-    Task(name: 'Buy eggs'),
-    Task(name: 'Buy bread'),
+    Task(name: 'TASK 1'),
   ];
 
   int get getCount {
