@@ -29,6 +29,36 @@ class MyApp extends StatelessWidget {
   }
 }
 
+class HomePage extends StatelessWidget {
+  final String title;
+  const HomePage({required this.title});
+
+  @override
+  Widget build(BuildContext context) {
+    var lh = MediaQuery.of(context).size.height;
+    return Scaffold(
+      backgroundColor: Colors.white,
+      // ignore: prefer_const_literals_to_create_immutables
+      body: Column(children: [
+        AppName(),
+        HelloTag(),
+        DateTag(),
+        MyClasses(),
+        AssignmentFolder(),
+        Divider(
+          height: 30,
+          thickness: 2,
+          color: Colors.black45,
+          indent: 40,
+          endIndent: 40,
+        ),
+        ToDoBar(),
+      ]),
+      bottomNavigationBar: SizedBox(height: lh / 10, child: BottomNavBar()),
+    );
+  }
+}
+
 class AppName extends StatelessWidget {
   const AppName({Key? key}) : super(key: key);
 
@@ -266,64 +296,44 @@ class BottomNavBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var lh = MediaQuery.of(context).size.height;
-    return BottomNavigationBar(
-      backgroundColor: Colors.grey,
-      items: <BottomNavigationBarItem>[
-        BottomNavigationBarItem(
-          icon: Icon(
-            Icons.date_range,
-            size: lh / 25,
+    return Container(
+      decoration: BoxDecoration(
+        boxShadow: const <BoxShadow>[
+          BoxShadow(
+            color: Colors.black,
+            blurRadius: 10,
           ),
-          label: 'Calender',
-        ),
-        BottomNavigationBarItem(
-          icon: Icon(
-            Icons.home_filled,
-            size: lh / 25,
+        ],
+      ),
+      child: BottomNavigationBar(
+        backgroundColor: Colors.white,
+        items: <BottomNavigationBarItem>[
+          BottomNavigationBarItem(
+            icon: Icon(
+              Icons.date_range,
+              size: lh / 25,
+            ),
+            label: 'Calender',
           ),
-          label: 'Home',
-        ),
-        BottomNavigationBarItem(
-          icon: Icon(
-            Icons.person,
-            size: lh / 25,
+          BottomNavigationBarItem(
+            icon: Icon(
+              Icons.home_filled,
+              size: lh / 25,
+            ),
+            label: 'Home',
           ),
-          label: 'Profile',
-        ),
-      ],
-      currentIndex: 1,
-      selectedItemColor: Colors.grey[900],
-      unselectedItemColor: Colors.grey[800],
-    );
-  }
-}
-
-class HomePage extends StatelessWidget {
-  final String title;
-  const HomePage({required this.title});
-
-  @override
-  Widget build(BuildContext context) {
-    var lh = MediaQuery.of(context).size.height;
-    return Scaffold(
-      backgroundColor: Colors.white,
-      // ignore: prefer_const_literals_to_create_immutables
-      body: Column(children: [
-        AppName(),
-        HelloTag(),
-        DateTag(),
-        MyClasses(),
-        AssignmentFolder(),
-        Divider(
-          height: 30,
-          thickness: 2,
-          color: Colors.black45,
-          indent: 40,
-          endIndent: 40,
-        ),
-        ToDoBar(),
-      ]),
-      bottomNavigationBar: SizedBox(height: lh / 10, child: BottomNavBar()),
+          BottomNavigationBarItem(
+            icon: Icon(
+              Icons.person,
+              size: lh / 25,
+            ),
+            label: 'Profile',
+          ),
+        ],
+        currentIndex: 1,
+        selectedItemColor: Colors.grey[900],
+        unselectedItemColor: Colors.grey[800],
+      ),
     );
   }
 }
