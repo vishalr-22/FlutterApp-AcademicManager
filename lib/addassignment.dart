@@ -1,23 +1,22 @@
-// ignore_for_file: prefer_const_constructors, use_key_in_widget_constructors
+// ignore_for_file: prefer_const_constructors
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:datetime_picker_formfield/datetime_picker_formfield.dart';
-import 'package:weekday_selector/weekday_selector.dart';
 import 'widgets/bottombar.dart';
 
 void main() {
-  runApp(const AddClass());
+  runApp(const AddAssignment());
 }
 
-class AddClass extends StatelessWidget {
-  const AddClass({Key? key}) : super(key: key);
+class AddAssignment extends StatelessWidget {
+  const AddAssignment({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     var lh = MediaQuery.of(context).size.height;
-    const appTitle = 'Add a class';
+    const appTitle = 'Add a Assignment';
     return MaterialApp(
       title: appTitle,
       home: Scaffold(
@@ -25,21 +24,21 @@ class AddClass extends StatelessWidget {
         appBar: AppBar(
           title: const Text(appTitle),
         ),
-        body: const MyCustomForm(),
+        body: const MyCustomForm2(),
         bottomNavigationBar: SizedBox(height: lh / 10, child: BottomNavBar()),
       ),
     );
   }
 }
 
-class MyCustomForm extends StatefulWidget {
-  const MyCustomForm({Key? key}) : super(key: key);
+class MyCustomForm2 extends StatefulWidget {
+  const MyCustomForm2({Key? key}) : super(key: key);
 
   @override
-  State<MyCustomForm> createState() => _MyCustomFormState();
+  State<MyCustomForm2> createState() => _MyCustomForm2State();
 }
 
-class _MyCustomFormState extends State<MyCustomForm> {
+class _MyCustomForm2State extends State<MyCustomForm2> {
   final formKey = GlobalKey<FormState>();
 
   @override
@@ -70,7 +69,7 @@ class _MyCustomFormState extends State<MyCustomForm> {
             Padding(
               padding: EdgeInsets.fromLTRB(0, ht / 50, 0, ht / 70),
               child: Text(
-                "Class Link",
+                "Title",
                 style:
                     TextStyle(fontSize: ht / 30, fontWeight: FontWeight.w500),
               ),
@@ -78,42 +77,49 @@ class _MyCustomFormState extends State<MyCustomForm> {
             TextFormField(
               decoration: InputDecoration(
                 border: OutlineInputBorder(), // UnderlineInputBorder(),
-                hintText: 'Paste class link here',
+                hintText: 'Name of assignment',
               ),
             ),
+            SizedBox(
+              height: ht / 20,
+            ),
+            Center(
+                child: Text(
+              "Deadline",
+              style: TextStyle(fontSize: ht / 30, fontWeight: FontWeight.w500),
+            )),
             SizedBox(
               height: ht / 50,
             ),
-            Center(
-                child: Text(
-              "Timing",
-              style: TextStyle(fontSize: ht / 30, fontWeight: FontWeight.w500),
-            )),
             Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-              BasicTimeField(),
-              SizedBox(
-                width: wd / 9,
-                child: Center(
-                  child: Text(
-                    "to",
+              Column(
+                children: [
+                  Text(
+                    'Due Date',
                     style: TextStyle(
-                        fontSize: ht / 40, fontWeight: FontWeight.w400),
+                        fontSize: ht / 50,
+                        fontStyle: FontStyle.italic,
+                        fontWeight: FontWeight.w600),
                   ),
-                ),
+                  BasicDateField(),
+                ],
               ),
-              BasicTimeField()
+              SizedBox(width: wd / 30),
+              Column(
+                children: [
+                  Text(
+                    'Time',
+                    style: TextStyle(
+                        fontSize: ht / 50,
+                        fontStyle: FontStyle.italic,
+                        fontWeight: FontWeight.w600),
+                  ),
+                  BasicTimeField()
+                ],
+              )
             ]),
             SizedBox(
               height: ht / 40,
-            ),
-            Center(
-                child: Text(
-              "Select days of week",
-              style: TextStyle(fontSize: ht / 30, fontWeight: FontWeight.w500),
-            )),
-            DayPicker(),
-            SizedBox(
-              height: ht / 20,
             ),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
@@ -142,16 +148,38 @@ class _MyCustomFormState extends State<MyCustomForm> {
   }
 }
 
-class BasicTimeField extends StatelessWidget {
-  final format = DateFormat.Hm();
+class BasicDateField extends StatelessWidget {
+  final format = DateFormat("dd-MMM-yyyy");
   @override
   Widget build(BuildContext context) {
     var wd = MediaQuery.of(context).size.width;
     return SizedBox(
-      width: wd / 4,
+      width: wd / 2.5,
       child: DateTimeField(
         format: format,
-        decoration: InputDecoration(border: UnderlineInputBorder()),
+        decoration: InputDecoration(border: OutlineInputBorder()),
+        onShowPicker: (context, currentValue) {
+          return showDatePicker(
+              context: context,
+              firstDate: DateTime(1900),
+              initialDate: currentValue ?? DateTime.now(),
+              lastDate: DateTime(2100));
+        },
+      ),
+    );
+  }
+}
+
+class BasicTimeField extends StatelessWidget {
+  final format = DateFormat("hh:mm a");
+  @override
+  Widget build(BuildContext context) {
+    var wd = MediaQuery.of(context).size.width;
+    return SizedBox(
+      width: wd / 2.5,
+      child: DateTimeField(
+        format: format,
+        decoration: InputDecoration(border: OutlineInputBorder()),
         onShowPicker: (context, currentValue) async {
           final TimeOfDay? time = await showTimePicker(
             context: context,
@@ -160,71 +188,6 @@ class BasicTimeField extends StatelessWidget {
           return time == null ? null : DateTimeField.convert(time);
         },
       ),
-    );
-  }
-}
-
-String intDayToEnglish(int day) {
-  if (day % 7 == DateTime.monday % 7) return 'Monday';
-  if (day % 7 == DateTime.tuesday % 7) return 'Tuesday';
-  if (day % 7 == DateTime.wednesday % 7) return 'Wednesday';
-  if (day % 7 == DateTime.thursday % 7) return 'Thursday';
-  if (day % 7 == DateTime.friday % 7) return 'Friday';
-  if (day % 7 == DateTime.saturday % 7) return 'Saturday';
-  if (day % 7 == DateTime.sunday % 7) return 'Sunday';
-  throw '🐞 This should never have happened: $day';
-}
-
-String valuesToEnglishDays(List<bool?> values, bool? searchedValue) {
-  final days = <String>[];
-  for (int i = 0; i < values.length; i++) {
-    final v = values[i];
-    // Use v == true, as the value could be null, as well (disabled days).
-    if (v == searchedValue) days.add(intDayToEnglish(i));
-  }
-  if (days.isEmpty) return '';
-  return days.join(', ');
-}
-
-class DayPicker extends StatefulWidget {
-  @override
-  _DayPickerState createState() => _DayPickerState();
-}
-
-class _DayPickerState extends State<DayPicker> {
-  final values2 = List.filled(7, false);
-
-  @override
-  Widget build(BuildContext context) {
-    var ht = MediaQuery.of(context).size.height;
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      children: <Widget>[
-        SizedBox(
-          height: ht / 40,
-        ),
-        Text(
-          'Selected Day(s): ${valuesToEnglishDays(values2, true)}',
-          style: TextStyle(fontSize: ht / 40, fontStyle: FontStyle.italic),
-        ),
-        WeekdaySelector(
-          onChanged: (v) {
-            setState(() {
-              values2[v % 7] = !values2[v % 7];
-            });
-          },
-          values: values2,
-          selectedFillColor: Colors.amber,
-          selectedColor: Colors.black,
-          selectedShape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(5),
-          ),
-          shape: RoundedRectangleBorder(
-            side: BorderSide(color: Colors.red.withOpacity(0.5)),
-            borderRadius: BorderRadius.circular(25),
-          ),
-        ),
-      ],
     );
   }
 }
