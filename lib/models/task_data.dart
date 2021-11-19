@@ -14,9 +14,7 @@ class Task {
 
 // ignore: non_constant_identifier_names
 class TaskData extends ChangeNotifier {
-  List<Task> tasks = [
-    Task(name: 'TASK 1'),
-  ];
+  List<Task> tasks = [];
 
   int get getCount {
     return tasks.length;

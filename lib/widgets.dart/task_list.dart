@@ -8,20 +8,27 @@ import 'package:acadmt/models/task_data.dart';
 class TaskList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Consumer<TaskData>(
-      builder: (context, taskData, child) {
-        return ListView.builder(
-          itemBuilder: (context, index) {
-            return TaskTile(
-                taskTitle: taskData.tasks[index].name,
-                isChecked: taskData.tasks[index].isDone,
-                checkboxCallback: (checkboxState) {
-                  taskData.updateTask(taskData.tasks[index]);
-                });
-          },
-          itemCount: taskData.getCount,
-        );
-      },
-    );
+    return Provider.of<TaskData>(context).tasks.isEmpty
+        ? Center(
+            child: Text(
+              'No todos.',
+              style: TextStyle(fontSize: 20),
+            ),
+          )
+        : Consumer<TaskData>(
+            builder: (context, taskData, child) {
+              return ListView.builder(
+                itemBuilder: (context, index) {
+                  return TaskTile(
+                      taskTitle: taskData.tasks[index].name,
+                      isChecked: taskData.tasks[index].isDone,
+                      checkboxCallback: (checkboxState) {
+                        taskData.updateTask(taskData.tasks[index]);
+                      });
+                },
+                itemCount: taskData.getCount,
+              );
+            },
+          );
   }
 }
