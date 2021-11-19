@@ -2,13 +2,12 @@
 
 import 'package:flutter/material.dart';
 import 'add_task_screen.dart';
-import 'package:provider/provider.dart';
-import 'widgets.dart/task_list.dart';
-import 'package:acadmt/models/task_data.dart';
+import 'widgets/task_list.dart';
 
 class TodoPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    var lh = MediaQuery.of(context).size.height;
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.transparent,
@@ -64,7 +63,7 @@ class TodoPage extends StatelessWidget {
           color: Colors.white,
         ),
       ),
-      bottomNavigationBar: BottomNavBar(),
+      bottomNavigationBar: SizedBox(height: lh / 10, child: BottomNavBar()),
     );
   }
 }
@@ -74,34 +73,45 @@ class BottomNavBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BottomNavigationBar(
-      backgroundColor: Colors.white,
-      items: const <BottomNavigationBarItem>[
-        BottomNavigationBarItem(
-          icon: Icon(
-            Icons.date_range,
-            size: 30,
+    var lh = MediaQuery.of(context).size.height;
+    return Container(
+      decoration: BoxDecoration(
+        boxShadow: const <BoxShadow>[
+          BoxShadow(
+            color: Colors.black,
+            blurRadius: 10,
           ),
-          label: 'Calender',
-        ),
-        BottomNavigationBarItem(
-          icon: Icon(
-            Icons.home_filled,
-            size: 30,
+        ],
+      ),
+      child: BottomNavigationBar(
+        backgroundColor: Colors.white,
+        items: <BottomNavigationBarItem>[
+          BottomNavigationBarItem(
+            icon: Icon(
+              Icons.date_range,
+              size: lh / 25,
+            ),
+            label: 'Calender',
           ),
-          label: 'Home',
-        ),
-        BottomNavigationBarItem(
-          icon: Icon(
-            Icons.person,
-            size: 30,
+          BottomNavigationBarItem(
+            icon: Icon(
+              Icons.home_filled,
+              size: lh / 25,
+            ),
+            label: 'Home',
           ),
-          label: 'Profile',
-        ),
-      ],
-      currentIndex: 1,
-      selectedItemColor: Colors.grey[900],
-      unselectedItemColor: Colors.grey[800],
+          BottomNavigationBarItem(
+            icon: Icon(
+              Icons.person,
+              size: lh / 25,
+            ),
+            label: 'Profile',
+          ),
+        ],
+        currentIndex: 1,
+        selectedItemColor: Colors.grey[900],
+        unselectedItemColor: Colors.grey[800],
+      ),
     );
   }
 }
