@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'widgets/bottombar.dart';
+import 'main.dart';
 
 void main() {
   runApp(Profile());
@@ -17,10 +19,11 @@ class ProfilePage extends StatelessWidget {
   @override
   Widget build(context) {
     var lh = MediaQuery.of(context).size.height;
+    var wd = MediaQuery.of(context).size.width;
     return Scaffold(
       body: Container(
         color: Colors.indigo[800],
-        padding: new EdgeInsets.all(25),
+        padding: new EdgeInsets.all(wd / 15),
         child: Column(
           children: [
             ProfileHeader(),
@@ -44,10 +47,16 @@ class ProfileHeader extends StatelessWidget {
         children: [
           Container(
             padding: new EdgeInsets.fromLTRB(15, 30, 25, 10),
-            child: Icon(
-              Icons.keyboard_arrow_left_rounded,
-              color: Colors.white,
-              size: 40,
+            child: IconButton(
+              icon: const Icon(
+                Icons.keyboard_arrow_left_rounded,
+                color: Colors.white,
+                size: 40,
+              ),
+              onPressed: () {
+                Navigator.push(
+                    context, MaterialPageRoute(builder: (context) => MyApp()));
+              },
             ),
           ),
           Container(
@@ -118,7 +127,7 @@ class ProfileDetails extends StatelessWidget {
   @override
   Widget build(context) {
     const _course = 'Computer Engineering';
-    const _college = 'K J Somaiya college of engineering';
+    const _college = 'KJSCE';
     var lw = MediaQuery.of(context).size.width;
     var lh = MediaQuery.of(context).size.height;
 
@@ -188,44 +197,6 @@ class ProfileEdit extends StatelessWidget {
               )
             ],
           )),
-    );
-  }
-}
-
-class BottomNavBar extends StatelessWidget {
-  const BottomNavBar({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    var lh = MediaQuery.of(context).size.height;
-    return BottomNavigationBar(
-      backgroundColor: Colors.grey,
-      items: <BottomNavigationBarItem>[
-        BottomNavigationBarItem(
-          icon: Icon(
-            Icons.date_range,
-            size: lh / 25,
-          ),
-          label: 'Calender',
-        ),
-        BottomNavigationBarItem(
-          icon: Icon(
-            Icons.home_filled,
-            size: lh / 25,
-          ),
-          label: 'Home',
-        ),
-        BottomNavigationBarItem(
-          icon: Icon(
-            Icons.person,
-            size: lh / 25,
-          ),
-          label: 'Profile',
-        ),
-      ],
-      currentIndex: 1,
-      selectedItemColor: Colors.grey[900],
-      unselectedItemColor: Colors.grey[800],
     );
   }
 }
