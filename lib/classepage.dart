@@ -12,8 +12,8 @@ class ClassPage extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
+    var lw = MediaQuery.of(context).size.width;
     var lh = MediaQuery.of(context).size.height;
-    // List<int> lst = [1, 2, 3, 4];
     return MaterialApp(
         home: Scaffold(
       floatingActionButton: FloatingActionButton(
@@ -36,7 +36,7 @@ class ClassPage extends StatelessWidget {
             Row(
               children: [
                 Container(
-                    padding: const EdgeInsets.fromLTRB(30, 30, 30, 10),
+                    padding: EdgeInsets.fromLTRB(lw / 40, lh / 20, 0, lh / 40),
                     child: IconButton(
                       icon: const Icon(
                         Icons.keyboard_arrow_left_outlined,
@@ -48,7 +48,7 @@ class ClassPage extends StatelessWidget {
                       },
                     )),
                 Container(
-                  padding: const EdgeInsets.fromLTRB(30, 30, 30, 10),
+                  padding: EdgeInsets.fromLTRB(lw / 8, lh / 20, 0, lh / 40),
                   // ignore: prefer_const_constructors
                   child: Text(
                     "My Classes",
@@ -58,7 +58,7 @@ class ClassPage extends StatelessWidget {
               ],
             ),
             Container(
-              padding: const EdgeInsets.fromLTRB(0, 10, 0, 40),
+              padding: EdgeInsets.fromLTRB(0, 0, 0, lh / 25),    
               // ignore: prefer_const_constructors
               child: Divider(
                 color: Colors.white,
@@ -84,8 +84,11 @@ class ClassPage extends StatelessWidget {
 class Divide extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    var lw = MediaQuery.of(context).size.width;
+    var lh = MediaQuery.of(context).size.height;
+    
     return (Container(
-      padding: const EdgeInsets.fromLTRB(15, 10, 15, 20),
+      padding: EdgeInsets.fromLTRB(lh / 45, lh / 50, lh / 45, lh / 50),
       child: const Divider(
         color: Colors.white,
         thickness: 2,
@@ -98,10 +101,13 @@ class Divide extends StatelessWidget {
 class Subject extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    var lw = MediaQuery.of(context).size.width;
+    var lh = MediaQuery.of(context).size.height;
+    
     return (Row(mainAxisAlignment: MainAxisAlignment.center, children: [
       Container(
         margin: const EdgeInsets.only(left: 0.0, right: 10.0),
-        padding: const EdgeInsets.fromLTRB(0, 7, 0, 7),
+        padding: EdgeInsets.fromLTRB(lh / 60, lh / 100, lh / 60, lh / 100),
         width: 210,
         decoration: BoxDecoration(
             // border: Border(left: BorderSide(color: Colors.black, width:3)),
@@ -138,7 +144,7 @@ class Subject extends StatelessWidget {
         ),
       ),
       Container(
-        padding: new EdgeInsets.fromLTRB(15, 18, 15, 18),
+        padding: EdgeInsets.fromLTRB(lh / 50, lh / 37, lh / 50, lh / 37),
         decoration: BoxDecoration(
             color: Colors.amber[50], borderRadius: BorderRadius.circular(5)),
 
@@ -153,7 +159,7 @@ class Subject extends StatelessWidget {
               border: Border.all(color: Colors.white),
               borderRadius: BorderRadius.circular(5)),
           margin: const EdgeInsets.only(left: 10.0, right: 0.0),
-          padding: new EdgeInsets.fromLTRB(15, 17, 15, 17),
+          padding: EdgeInsets.fromLTRB(lh / 40, lh / 40, lh / 40, lh / 40),
           child: const Icon(
             Icons.edit,
             color: Colors.white,

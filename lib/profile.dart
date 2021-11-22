@@ -1,11 +1,16 @@
 import 'package:flutter/material.dart';
+import 'editProfile.dart';
 
+var username = 'R. Vishal';
+var sem = 'Sem V';
+var course = 'Computer Engineering';
+var college = 'K J Somaiya college of engineering';
 void main() {
-  runApp(Profile());
+  runApp(MyApp());
 }
 
-class Profile extends StatelessWidget {
-  const Profile({Key? key}) : super(key: key);
+class MyApp extends StatelessWidget {
+  const MyApp({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -65,13 +70,12 @@ class ProfileHeader extends StatelessWidget {
 }
 
 class ProfileCard extends StatelessWidget {
+  
   @override
   Widget build(context) {
     var lw = MediaQuery.of(context).size.width;
     var lh = MediaQuery.of(context).size.height;
-    const _username = 'R. Vishal';
-    const _sem = 'Sem V';
-
+    
     return Container(
         alignment: AlignmentDirectional.center,
         height: lh / 3.5,
@@ -96,14 +100,14 @@ class ProfileCard extends StatelessWidget {
             alignment: AlignmentDirectional.center,
             margin: const EdgeInsets.fromLTRB(0, 0, 0, 7),
             child: new Text(
-              "$_username",
+              "$username",
               style: TextStyle(fontSize: lh / 28, fontWeight: FontWeight.bold),
             ),
           ),
           Container(
             alignment: AlignmentDirectional.center,
             child: new Text(
-              "$_sem",
+              "$sem",
               style: TextStyle(
                 fontSize: lh / 30,
                 color: Colors.black.withOpacity(0.5),
@@ -115,10 +119,9 @@ class ProfileCard extends StatelessWidget {
 }
 
 class ProfileDetails extends StatelessWidget {
+  
   @override
   Widget build(context) {
-    const _course = 'Computer Engineering';
-    const _college = 'K J Somaiya college of engineering';
     var lw = MediaQuery.of(context).size.width;
     var lh = MediaQuery.of(context).size.height;
 
@@ -140,8 +143,8 @@ class ProfileDetails extends StatelessWidget {
                       color: Colors.black,
                     ),
                     Text(
-                      " $_course",
-                      style: TextStyle(color: Colors.black, fontSize: lh / 35),
+                      " $course",
+                      style: TextStyle(color: Colors.black, fontSize: lh / 38),
                     )
                   ],
                 )),
@@ -154,8 +157,8 @@ class ProfileDetails extends StatelessWidget {
                     color: Colors.black,
                   ),
                   Text(
-                    " $_college",
-                    style: TextStyle(color: Colors.black, fontSize: lh / 35),
+                    " $college",
+                    style: TextStyle(color: Colors.black, fontSize: lh / 38),
                   )
                 ],
               ),
@@ -169,7 +172,10 @@ class ProfileEdit extends StatelessWidget {
   @override
   Widget build(context) {
     return GestureDetector(
-      onTap: () {},
+      onTap: () {
+          Navigator.push(
+              context, MaterialPageRoute(builder: (context) => EditProfilePage()));
+        },
       child: Container(
           padding: new EdgeInsets.fromLTRB(15, 18, 15, 18),
           width: 155,
