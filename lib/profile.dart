@@ -4,7 +4,7 @@ import 'widgets/bottombar.dart';
 import 'main.dart';
 
 var username = 'R. Vishal';
-var sem = 'Sem V';
+var sem = 'Sem V' ;
 var course = 'Computer Engineering';
 var college = 'K J Somaiya college of engineering';
 void main() {
