@@ -1,16 +1,18 @@
 import 'package:flutter/material.dart';
 import 'editProfile.dart';
+import 'widgets/bottombar.dart';
+import 'main.dart';
 
 var username = 'R. Vishal';
 var sem = 'Sem V';
 var course = 'Computer Engineering';
 var college = 'K J Somaiya college of engineering';
 void main() {
-  runApp(MyApp());
+  runApp(Profile());
 }
 
-class MyApp extends StatelessWidget {
-  const MyApp({Key? key}) : super(key: key);
+class Profile extends StatelessWidget {
+  const Profile({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -22,10 +24,11 @@ class ProfilePage extends StatelessWidget {
   @override
   Widget build(context) {
     var lh = MediaQuery.of(context).size.height;
+    var wd = MediaQuery.of(context).size.width;
     return Scaffold(
       body: Container(
         color: Colors.indigo[800],
-        padding: new EdgeInsets.all(25),
+        padding: new EdgeInsets.all(wd / 15),
         child: Column(
           children: [
             ProfileHeader(),
@@ -49,10 +52,16 @@ class ProfileHeader extends StatelessWidget {
         children: [
           Container(
             padding: new EdgeInsets.fromLTRB(15, 30, 25, 10),
-            child: Icon(
-              Icons.keyboard_arrow_left_rounded,
-              color: Colors.white,
-              size: 40,
+            child: IconButton(
+              icon: const Icon(
+                Icons.keyboard_arrow_left_rounded,
+                color: Colors.white,
+                size: 40,
+              ),
+              onPressed: () {
+                Navigator.push(
+                    context, MaterialPageRoute(builder: (context) => MyApp()));
+              },
             ),
           ),
           Container(
@@ -194,44 +203,6 @@ class ProfileEdit extends StatelessWidget {
               )
             ],
           )),
-    );
-  }
-}
-
-class BottomNavBar extends StatelessWidget {
-  const BottomNavBar({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    var lh = MediaQuery.of(context).size.height;
-    return BottomNavigationBar(
-      backgroundColor: Colors.grey,
-      items: <BottomNavigationBarItem>[
-        BottomNavigationBarItem(
-          icon: Icon(
-            Icons.date_range,
-            size: lh / 25,
-          ),
-          label: 'Calender',
-        ),
-        BottomNavigationBarItem(
-          icon: Icon(
-            Icons.home_filled,
-            size: lh / 25,
-          ),
-          label: 'Home',
-        ),
-        BottomNavigationBarItem(
-          icon: Icon(
-            Icons.person,
-            size: lh / 25,
-          ),
-          label: 'Profile',
-        ),
-      ],
-      currentIndex: 1,
-      selectedItemColor: Colors.grey[900],
-      unselectedItemColor: Colors.grey[800],
     );
   }
 }

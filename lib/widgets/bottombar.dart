@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../main.dart';
+import '../profile.dart';
 
 class BottomNavBar extends StatelessWidget {
   const BottomNavBar({Key? key}) : super(key: key);
@@ -47,6 +48,9 @@ class BottomNavBar extends StatelessWidget {
             if (index == 1) {
               Navigator.push(
                   context, MaterialPageRoute(builder: (context) => MyApp()));
+            } else if (index == 2) {
+              Navigator.push(
+                  context, MaterialPageRoute(builder: (context) => Profile()));
             }
           }),
     );
