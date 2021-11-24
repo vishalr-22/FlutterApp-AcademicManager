@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "90190761173",
+    "project_id": "academicmanager-4873a",
+    "storage_bucket": "academicmanager-4873a.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:90190761173:android:37ea4623d40724e496e65c",
+        "android_client_info": {
+          "package_name": "com.example.acadmt"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "90190761173-rm7kv58apkimdep09e8r0cbqjvi8748l.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD6CKCbMI6MCMSVLt3a5GIa_GDPPjOuOEo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "90190761173-rm7kv58apkimdep09e8r0cbqjvi8748l.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
