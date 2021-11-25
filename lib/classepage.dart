@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'addclass.dart';
 import 'widgets/bottombar.dart';
+// import 'package:cloud_firestore/cloud_firestore.dart';
 
 void main() {
   runApp(const ClassPage());
@@ -21,16 +22,16 @@ class ClassPage extends StatelessWidget {
           Navigator.push(context,
               MaterialPageRoute(builder: (context) => const AddClass()));
         },
-        child: const Icon(
+        child: Icon(
           Icons.add,
           color: Colors.black,
-          size: 40,
+          size: lw / 10,
         ),
         backgroundColor: Colors.white,
       ),
       body: Container(
         color: Colors.teal,
-        padding: const EdgeInsets.all(25),
+        padding: EdgeInsets.all(lw / 15),
         child: Column(
           children: [
             Row(
@@ -38,9 +39,9 @@ class ClassPage extends StatelessWidget {
                 Container(
                     padding: EdgeInsets.fromLTRB(lw / 40, lh / 20, 0, lh / 40),
                     child: IconButton(
-                      icon: const Icon(
+                      icon: Icon(
                         Icons.keyboard_arrow_left_outlined,
-                        size: 40,
+                        size: lw / 10,
                       ),
                       color: Colors.white,
                       onPressed: () {
@@ -48,7 +49,7 @@ class ClassPage extends StatelessWidget {
                       },
                     )),
                 Container(
-                  padding: EdgeInsets.fromLTRB(lw / 8, lh / 20, 0, lh / 40),
+                  padding: EdgeInsets.fromLTRB(lw / 10, lh / 15, 0, lh / 40),
                   // ignore: prefer_const_constructors
                   child: Text(
                     "My Classes",
@@ -58,7 +59,7 @@ class ClassPage extends StatelessWidget {
               ],
             ),
             Container(
-              padding: EdgeInsets.fromLTRB(0, 0, 0, lh / 25),    
+              padding: EdgeInsets.fromLTRB(0, 0, 0, lh / 25),
               // ignore: prefer_const_constructors
               child: Divider(
                 color: Colors.white,
@@ -75,7 +76,8 @@ class ClassPage extends StatelessWidget {
           ],
         ),
       ),
-      bottomNavigationBar: SizedBox(height: lh / 10, child: BottomNavBar()),
+      bottomNavigationBar:
+          SizedBox(height: lh / 10, child: const BottomNavBar()),
     ));
   }
 }
@@ -86,9 +88,9 @@ class Divide extends StatelessWidget {
   Widget build(BuildContext context) {
     var lw = MediaQuery.of(context).size.width;
     var lh = MediaQuery.of(context).size.height;
-    
+
     return (Container(
-      padding: EdgeInsets.fromLTRB(lh / 45, lh / 50, lh / 45, lh / 50),
+      padding: EdgeInsets.fromLTRB(lw / 40, lh / 60, lw / 40, lh / 50),
       child: const Divider(
         color: Colors.white,
         thickness: 2,
@@ -103,12 +105,12 @@ class Subject extends StatelessWidget {
   Widget build(BuildContext context) {
     var lw = MediaQuery.of(context).size.width;
     var lh = MediaQuery.of(context).size.height;
-    
+
     return (Row(mainAxisAlignment: MainAxisAlignment.center, children: [
       Container(
-        margin: const EdgeInsets.only(left: 0.0, right: 10.0),
-        padding: EdgeInsets.fromLTRB(lh / 60, lh / 100, lh / 60, lh / 100),
-        width: 210,
+        margin: EdgeInsets.only(left: 0.0, right: lw / 40),
+        padding: EdgeInsets.fromLTRB(lw / 40, lh / 100, lw / 40, lh / 100),
+        width: lw / 2,
         decoration: BoxDecoration(
             // border: Border(left: BorderSide(color: Colors.black, width:3)),
             color: Colors.amber[50],
@@ -117,13 +119,13 @@ class Subject extends StatelessWidget {
           children: [
             Container(
               padding: const EdgeInsets.fromLTRB(10, 0, 0, 0),
-              child: const Align(
+              child: Align(
                 alignment: Alignment.centerLeft,
                 child: Text(
                   "Subject-1",
                   style: TextStyle(
                     color: Colors.black,
-                    fontSize: 20,
+                    fontSize: lh / 40,
                   ),
                 ),
               ),
@@ -136,7 +138,7 @@ class Subject extends StatelessWidget {
                     "Time",
                     style: TextStyle(
                       color: Colors.black.withOpacity(0.5),
-                      fontSize: 20,
+                      fontSize: lh / 40,
                     ),
                   ),
                 ))
@@ -144,13 +146,14 @@ class Subject extends StatelessWidget {
         ),
       ),
       Container(
-        padding: EdgeInsets.fromLTRB(lh / 50, lh / 37, lh / 50, lh / 37),
+        padding: EdgeInsets.fromLTRB(lw / 30, lh / 40, lw / 30, lh / 40),
         decoration: BoxDecoration(
             color: Colors.amber[50], borderRadius: BorderRadius.circular(5)),
 
         child: Text(
           "Day",
-          style: TextStyle(color: Colors.black.withOpacity(0.5), fontSize: 20),
+          style: TextStyle(
+              color: Colors.black.withOpacity(0.5), fontSize: lh / 40),
         ),
         // decoration: BoxDecoration(borderRadius: BorderRadius.circular(30)),
       ),
@@ -159,7 +162,7 @@ class Subject extends StatelessWidget {
               border: Border.all(color: Colors.white),
               borderRadius: BorderRadius.circular(5)),
           margin: const EdgeInsets.only(left: 10.0, right: 0.0),
-          padding: EdgeInsets.fromLTRB(lh / 40, lh / 40, lh / 40, lh / 40),
+          padding: EdgeInsets.fromLTRB(lw / 30, lh / 50, lw / 30, lh / 50),
           child: const Icon(
             Icons.edit,
             color: Colors.white,
