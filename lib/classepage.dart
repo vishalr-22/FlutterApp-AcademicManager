@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'addclass.dart';
 import 'widgets/bottombar.dart';
-// import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 void main() {
   runApp(const ClassPage());
