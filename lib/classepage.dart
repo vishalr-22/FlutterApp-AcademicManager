@@ -1,18 +1,39 @@
 import 'package:flutter/material.dart';
 import 'addclass.dart';
 import 'widgets/bottombar.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-void main() {
+main() {
   runApp(const ClassPage());
 }
 
-class ClassPage extends StatelessWidget {
+class ClassPage extends StatefulWidget {
   const ClassPage({Key? key}) : super(key: key);
 
-  // This widget is the root of your application.
+  @override
+  State<ClassPage> createState() => _ClassPageState();
+}
+
+class _ClassPageState extends State<ClassPage> {
+  final firestoreInstance = FirebaseFirestore.instance;
+
+  void fetchData() {
+    firestoreInstance.collection("classes").get().then((querySnapshot) {
+      querySnapshot.docs.forEach((result) {
+        print(result.data());
+      });
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
+    List<Map> subjects = [
+      {"name": "WAK", "time": 13.30, "day": 'Mon'},
+      {"name": "RAD", "time": 10.30, "day": 'Tue'},
+      {"name": "PQR", "time": 15.15, "day": 'Fri'}
+    ];
+
     var lw = MediaQuery.of(context).size.width;
     var lh = MediaQuery.of(context).size.height;
     return MaterialApp(
@@ -66,13 +87,19 @@ class ClassPage extends StatelessWidget {
                 thickness: 2,
               ),
             ),
-            Subject(),
-            Divide(),
-            Subject(),
-            Divide(),
-            Subject(),
-            Divide(),
-            Subject(),
+            Column(
+              children: [
+                for (Map sub in subjects)
+                  Column(
+                    children: [
+                      Subject(
+                        dataMap: sub,
+                      ),
+                      Divide()
+                    ],
+                  )
+              ],
+            ),
           ],
         ),
       ),
@@ -99,10 +126,15 @@ class Divide extends StatelessWidget {
   }
 }
 
-// ignore: use_key_in_widget_constructors
 class Subject extends StatelessWidget {
+  Map dataMap;
+
+  Subject({Key? key, required this.dataMap}) : super(key: key);
   @override
   Widget build(BuildContext context) {
+    var subjectName = dataMap["name"];
+    var classTime = dataMap["time"];
+    var day = dataMap["day"];
     var lw = MediaQuery.of(context).size.width;
     var lh = MediaQuery.of(context).size.height;
 
@@ -122,7 +154,7 @@ class Subject extends StatelessWidget {
               child: Align(
                 alignment: Alignment.centerLeft,
                 child: Text(
-                  "Subject-1",
+                  "$subjectName",
                   style: TextStyle(
                     color: Colors.black,
                     fontSize: lh / 40,
@@ -135,7 +167,7 @@ class Subject extends StatelessWidget {
                 child: Align(
                   alignment: Alignment.centerLeft,
                   child: Text(
-                    "Time",
+                    "$classTime",
                     style: TextStyle(
                       color: Colors.black.withOpacity(0.5),
                       fontSize: lh / 40,
@@ -146,14 +178,18 @@ class Subject extends StatelessWidget {
         ),
       ),
       Container(
-        padding: EdgeInsets.fromLTRB(lw / 30, lh / 40, lw / 30, lh / 40),
+        padding: EdgeInsets.all(lw / 40),
         decoration: BoxDecoration(
             color: Colors.amber[50], borderRadius: BorderRadius.circular(5)),
 
-        child: Text(
-          "Day",
-          style: TextStyle(
-              color: Colors.black.withOpacity(0.5), fontSize: lh / 40),
+        child: SizedBox(
+          width: lw / 10,
+          height: lh / 20,
+          child: Text(
+            "$day",
+            style: TextStyle(
+                color: Colors.black.withOpacity(0.5), fontSize: lh / 40),
+          ),
         ),
         // decoration: BoxDecoration(borderRadius: BorderRadius.circular(30)),
       ),
@@ -162,11 +198,14 @@ class Subject extends StatelessWidget {
               border: Border.all(color: Colors.white),
               borderRadius: BorderRadius.circular(5)),
           margin: const EdgeInsets.only(left: 10.0, right: 0.0),
-          padding: EdgeInsets.fromLTRB(lw / 30, lh / 50, lw / 30, lh / 50),
-          child: const Icon(
-            Icons.edit,
-            color: Colors.white,
-          )),
+          padding: EdgeInsets.fromLTRB(lw / 80, lh / 200, lw / 80, lh / 200),
+          child: IconButton(
+              iconSize: lh / 35,
+              onPressed: () {},
+              icon: Icon(
+                Icons.edit,
+                color: Colors.white,
+              ))),
     ]));
   }
 }
