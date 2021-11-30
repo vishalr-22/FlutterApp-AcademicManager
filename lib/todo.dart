@@ -1,11 +1,52 @@
 // ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables, must_be_immutable, use_key_in_widget_constructors, prefer_const_constructors_in_immutables, empty_constructor_bodies, avoid_print
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'add_task_screen.dart';
-import 'widgets/task_list.dart';
 import 'widgets/bottombar.dart';
 
-class TodoPage extends StatelessWidget {
+class TodoPage extends StatefulWidget {
+  // const TodoPage({Key? key, required this.title}) : super(key: key);
+
+  // final String title;
+
+  @override
+  State<TodoPage> createState() => _TodoPageState();
+}
+
+class _TodoPageState extends State<TodoPage> {
+  List todos = List.empty();
+  String title = "";
+  String description = "";
+
+  @override
+  void initState() {
+    super.initState();
+    todos = ["Hello", "Hey There"];
+  }
+
+  createToDo() {
+    DocumentReference documentReference =
+        FirebaseFirestore.instance.collection("Task").doc(title);
+
+    Map<String, dynamic> todoList = {
+      "todoTitle": title,
+      "todoDesc": description,
+    };
+
+    documentReference
+        .set(todoList)
+        .whenComplete(() => print("Data stored successfully"));
+  }
+
+  deleteTodo(item) {
+    DocumentReference documentReference =
+        FirebaseFirestore.instance.collection("Task").doc(item);
+
+    documentReference
+        .delete()
+        .whenComplete(() => print("deleted successfully"));
+  }
+
   @override
   Widget build(BuildContext context) {
     var lh = MediaQuery.of(context).size.height;
@@ -42,21 +83,108 @@ class TodoPage extends StatelessWidget {
           Expanded(
             child: Container(
               padding: EdgeInsets.fromLTRB(0, 0, 0, 10),
-              child: TaskList(),
+              child: StreamBuilder<QuerySnapshot>(
+                  stream:
+                      FirebaseFirestore.instance.collection('Task').snapshots(),
+                  builder: (context, snapshot) {
+                    if (snapshot.hasError) {
+                      return Text('Something went wrong');
+                    } else if (snapshot.hasData || snapshot.data != null) {
+                      return ListView.builder(
+                        itemCount: snapshot.data?.docs.length,
+                        itemBuilder: (BuildContext context, int index) {
+                          QueryDocumentSnapshot<Object?>? documentSnapshot =
+                              snapshot.data?.docs[index];
+
+                          return Dismissible(
+                              key: UniqueKey(),
+                              // key: Key(index.toString()),
+                              background: Container(
+                                padding: EdgeInsets.all(10),
+                                color: Colors.red,
+                                child: Align(
+                                  alignment: Alignment.centerRight,
+                                  child: Text(
+                                    'DELETE',
+                                    style: TextStyle(
+                                      color: Colors.white,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              direction: DismissDirection.endToStart,
+                              onDismissed: (direction) {
+                                setState(() {
+                                  deleteTodo((documentSnapshot != null)
+                                      ? (documentSnapshot["todoTitle"])
+                                      : "");
+                                });
+                              },
+                              child: ListTile(
+                                title: Text((documentSnapshot != null)
+                                    ? (documentSnapshot["todoTitle"])
+                                    : ""),
+                                subtitle: Text((documentSnapshot != null)
+                                    ? ((documentSnapshot["todoDesc"] != null)
+                                        ? documentSnapshot["todoDesc"]
+                                        : "")
+                                    : ""),
+                              ));
+                        },
+                      );
+                    }
+                    return const Center(
+                      child: CircularProgressIndicator(
+                        valueColor: AlwaysStoppedAnimation<Color>(
+                          Colors.blue,
+                        ),
+                      ),
+                    );
+                  }),
             ),
           )
         ],
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          showModalBottomSheet(
+          showDialog(
               context: context,
-              isScrollControlled: true,
-              builder: (context) => SingleChildScrollView(
-                  child: Container(
-                      padding: EdgeInsets.only(
-                          bottom: MediaQuery.of(context).viewInsets.bottom),
-                      child: AddTaskScreen())));
+              builder: (BuildContext context) {
+                return AlertDialog(
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10)),
+                  title: const Text("Add Todo"),
+                  content: Container(
+                    width: 400,
+                    height: 100,
+                    child: Column(
+                      children: [
+                        TextField(
+                          onChanged: (String value) {
+                            title = value;
+                          },
+                        ),
+                        TextField(
+                          onChanged: (String value) {
+                            description = value;
+                          },
+                        ),
+                      ],
+                    ),
+                  ),
+                  actions: <Widget>[
+                    TextButton(
+                        onPressed: () {
+                          setState(() {
+                            //todos.add(title);
+                            createToDo();
+                          });
+                          Navigator.of(context).pop();
+                        },
+                        child: const Text("Add"))
+                  ],
+                );
+              });
         },
         backgroundColor: Colors.lightBlueAccent,
         child: Icon(
