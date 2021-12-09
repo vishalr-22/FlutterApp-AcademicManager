@@ -46,6 +46,8 @@ class ProfilePage extends StatelessWidget {
 class ProfileHeader extends StatelessWidget {
   @override
   Widget build(context) {
+    var lw = MediaQuery.of(context).size.width;
+    var lh = MediaQuery.of(context).size.height;
     return Container(
       margin: const EdgeInsets.fromLTRB(0, 0, 0, 10),
       child: Row(
@@ -65,7 +67,7 @@ class ProfileHeader extends StatelessWidget {
             ),
           ),
           Container(
-            padding: new EdgeInsets.fromLTRB(60, 30, 30, 10),
+            padding: new EdgeInsets.fromLTRB(lw / 9, lh / 20, 30, 10),
             alignment: AlignmentDirectional.center,
             child: Text(
               "Profile",
@@ -84,10 +86,10 @@ class ProfileCard extends StatelessWidget {
   Widget build(context) {
     var lw = MediaQuery.of(context).size.width;
     var lh = MediaQuery.of(context).size.height;
-    
+    var ch = lh / 3.5;
     return Container(
         alignment: AlignmentDirectional.center,
-        height: lh / 3.5,
+        height: ch,
         width: double.infinity,
         decoration: BoxDecoration(
             color: Colors.amber[50], borderRadius: BorderRadius.circular(15)),
@@ -133,11 +135,12 @@ class ProfileDetails extends StatelessWidget {
   Widget build(context) {
     var lw = MediaQuery.of(context).size.width;
     var lh = MediaQuery.of(context).size.height;
+    var ch = lh / 5.4;
 
     return Container(
         padding: EdgeInsets.fromLTRB(lw / 43, lw / 30, lw / 200, lw / 30),
         width: double.infinity,
-        height: lh / 5.8,
+        height: ch,
         margin: const EdgeInsetsDirectional.fromSTEB(0, 25, 0, 10),
         decoration: BoxDecoration(
             color: Colors.amber[50], borderRadius: BorderRadius.circular(20)),
@@ -165,9 +168,18 @@ class ProfileDetails extends StatelessWidget {
                     Icons.school_rounded,
                     color: Colors.black,
                   ),
-                  Text(
+                  // Text(
+                  //   " $college",
+                  //   style: TextStyle(color: Colors.black, fontSize: lh / 38),
+                  // )
+                  Flexible(
+                    child: Text(
                     " $college",
                     style: TextStyle(color: Colors.black, fontSize: lh / 38),
+                    maxLines: 2,
+                    softWrap: true,
+                  )
+                  
                   )
                 ],
               ),

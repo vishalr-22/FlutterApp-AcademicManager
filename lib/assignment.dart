@@ -3,6 +3,8 @@
 import 'package:flutter/material.dart';
 import 'addassignment.dart';
 import 'widgets/bottombar.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 void main() {
   runApp(AssignmentPage());
@@ -10,9 +12,25 @@ void main() {
 
 class AssignmentPage extends StatelessWidget {
   // This widget is the root of your application.
+
+  final firestoreInstance = FirebaseFirestore.instance;
+
+  void fetchData() {
+    firestoreInstance.collection("assignment").get().then((querySnapshot) {
+      querySnapshot.docs.forEach((result) {
+        print(result.data());
+      });
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
-    var lw = MediaQuery.of(context).size.width;
+    List<Map> assignments = [
+      {"name": "WAK", "dueDate": 'Sep 15'},
+      {"name": "RAD", "dueDate": 'Sep 16'},
+      {"name": "PQR", "dueDate": 'Sep 17'}
+    ];
+    var wd = MediaQuery.of(context).size.width;
     var lh = MediaQuery.of(context).size.height;
     return MaterialApp(
         home: Scaffold(
@@ -30,13 +48,13 @@ class AssignmentPage extends StatelessWidget {
       ),
       body: Container(
         color: Colors.teal,
-        padding: new EdgeInsets.all(lw/25),
+        padding: new EdgeInsets.all(wd / 25),
         child: Column(
           children: [
             Row(
               children: [
                 Container(
-                    padding: EdgeInsets.fromLTRB(lw / 40, lh / 20, 0, lh / 40),
+                    padding: EdgeInsets.fromLTRB(wd / 40, lh / 20, 0, lh / 40),
                     child: IconButton(
                       icon: const Icon(
                         Icons.keyboard_arrow_left_outlined,
@@ -48,7 +66,7 @@ class AssignmentPage extends StatelessWidget {
                       },
                     )),
                 Container(
-                  padding: EdgeInsets.fromLTRB(lw / 9, lh / 20, 0, lh / 40),
+                  padding: EdgeInsets.fromLTRB(wd / 9, lh / 20, 0, lh / 40),
                   child: Text(
                     "Assignments",
                     style: TextStyle(color: Colors.white, fontSize: 25),
@@ -63,13 +81,25 @@ class AssignmentPage extends StatelessWidget {
                 thickness: 2,
               ),
             ),
-            Subject(),
-            Divide(),
-            Subject(),
-            Divide(),
-            Subject(),
-            Divide(),
-            Subject(),
+            Column(
+              children: [
+              for (Map assign in assignments)
+                Column(
+                  children: [
+                    Subject(
+                      dataMap: assign,
+                    ),
+                    Divide()
+                  ],
+                )
+            ])
+            // Subject(),
+            // Divide(),
+            // Subject(),
+            // Divide(),
+            // Subject(),
+            // Divide(),
+            // Subject(),
           ],
         ),
       ),
@@ -80,10 +110,10 @@ class AssignmentPage extends StatelessWidget {
 
 class Divide extends StatelessWidget {
   Widget build(BuildContext context) {
-    var lw = MediaQuery.of(context).size.width;
+    var wd = MediaQuery.of(context).size.width;
     var lh = MediaQuery.of(context).size.height;
     return (Container(
-      padding: EdgeInsets.fromLTRB(lh / 45, lh / 50, lh / 45, lh / 50),
+      padding: EdgeInsets.fromLTRB(wd / 25, lh / 50, wd / 25, lh / 50),
       child: Divider(
         color: Colors.white,
         thickness: 2,
@@ -93,10 +123,16 @@ class Divide extends StatelessWidget {
 }
 
 class Subject extends StatelessWidget {
+  Map dataMap;
+
+  Subject({Key? key, required this.dataMap}) : super(key: key);
+  @override
   Widget build(BuildContext context) {
-    var lw = MediaQuery.of(context).size.width;
+    var wd = MediaQuery.of(context).size.width;
     var lh = MediaQuery.of(context).size.height;
-    
+    var subjectName = dataMap["name"];
+    var dueDate = dataMap["dueDate"];
+
     return (Row(mainAxisAlignment: MainAxisAlignment.center, children: [
       Container(
         margin: const EdgeInsets.only(left: 0.0, right: 10.0),
@@ -113,7 +149,7 @@ class Subject extends StatelessWidget {
               child: Align(
                 alignment: Alignment.centerLeft,
                 child: Text(
-                  "Subject-1",
+                  "$subjectName",
                   style: TextStyle(
                     color: Colors.black,
                     fontSize: 20,
@@ -126,7 +162,7 @@ class Subject extends StatelessWidget {
                 child: Align(
                   alignment: Alignment.centerLeft,
                   child: Text(
-                    "Due: Sep 15",
+                    "$dueDate",
                     style: TextStyle(
                       color: Colors.black.withOpacity(0.5),
                       fontSize: 17,
@@ -141,7 +177,7 @@ class Subject extends StatelessWidget {
               border: Border.all(color: Colors.white),
               borderRadius: BorderRadius.circular(5)),
           margin: const EdgeInsets.only(left: 10.0, right: 0.0),
-          padding: EdgeInsets.fromLTRB(lw / 21, lw / 21, lw / 21, lw / 21),
+          padding: EdgeInsets.fromLTRB(wd / 21, wd / 21, wd / 21, wd / 21),
           child: Icon(
             Icons.edit,
             color: Colors.white,

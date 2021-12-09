@@ -44,7 +44,7 @@ class EditHeader extends StatelessWidget {
       child: Row(
         children: [
           Container(
-              padding: EdgeInsets.fromLTRB(ht / 40, ht / 20, ht / 35, ht / 50),
+              padding: EdgeInsets.fromLTRB(wd / 70, ht / 20, wd / 30, ht / 50),
               child: GestureDetector(
                 onTap: () {
                   Navigator.push(
@@ -61,7 +61,7 @@ class EditHeader extends StatelessWidget {
                 ),
               )),
           Container(
-            padding: EdgeInsets.fromLTRB(ht / 17, ht / 20, ht / 35, ht / 50),
+            padding: EdgeInsets.fromLTRB(wd / 7, ht / 20, wd / 35, ht / 50),
               
             alignment: AlignmentDirectional.center,
             child: Text(
@@ -70,7 +70,7 @@ class EditHeader extends StatelessWidget {
             ),
           ),
           Container(
-              padding: EdgeInsets.fromLTRB(ht / 18, ht / 20, ht / 35, ht / 50),
+              padding: EdgeInsets.fromLTRB(wd / 7, ht / 20, 0, ht / 50),
               
               child: GestureDetector(
                 onTap: () {
