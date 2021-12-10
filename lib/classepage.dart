@@ -18,20 +18,32 @@ class ClassPage extends StatefulWidget {
 class _ClassPageState extends State<ClassPage> {
   final firestoreInstance = FirebaseFirestore.instance;
 
-  void fetchData() {
-    firestoreInstance.collection("classes").get().then((querySnapshot) {
-      querySnapshot.docs.forEach((result) {
-        print(result.data());
-      });
-    });
-  }
+  // void fetchData() {
+  //   firestoreInstance.collection("classes").get().then((querySnapshot) {
+  //     querySnapshot.docs.forEach((result) {
+  //       print(result.data());
+  //     });
+  //   });
+  // }
 
   @override
   Widget build(BuildContext context) {
     List<Map> subjects = [
-      {"name": "WAK", "time": 13.30, "day": 'Mon'},
-      {"name": "RAD", "time": 10.30, "day": 'Tue'},
-      {"name": "PQR", "time": 15.15, "day": 'Fri'}
+      {
+        "subject": "WAK",
+        "fromTime": "13:30",
+        "days": ['Mon']
+      },
+      {
+        "subject": "RAD",
+        "fromTime": "10:30",
+        "days": ['Tue']
+      },
+      {
+        "subject": "PQR",
+        "fromTime": "15:15",
+        "days": ['Fri']
+      }
     ];
 
     var lw = MediaQuery.of(context).size.width;
@@ -87,19 +99,42 @@ class _ClassPageState extends State<ClassPage> {
                 thickness: 2,
               ),
             ),
-            Column(
-              children: [
-                for (Map sub in subjects)
-                  Column(
-                    children: [
-                      Subject(
-                        dataMap: sub,
-                      ),
-                      Divide()
-                    ],
-                  )
-              ],
+            FutureBuilder<QuerySnapshot>(
+              future: FirebaseFirestore.instance.collection('classes').get(),
+              builder: (BuildContext context,
+                  AsyncSnapshot<QuerySnapshot> snapshot) {
+                if (snapshot.hasData) {
+                  return Column(
+                    children: snapshot.data?.docs.map((doc) {
+                          return Column(
+                            children: [
+                              Subject(
+                                  dataMap: doc.data() as Map<dynamic, dynamic>),
+                              Divide()
+                            ],
+                          );
+                        }).toList() ??
+                        [],
+                  );
+                } else {
+                  // or your loading widget here
+                  return Text("Loading....");
+                }
+              },
             ),
+            // Column(
+            //   children: [
+            //     for (Map sub in subjects)
+            //       Column(
+            //         children: [
+            //           Subject(
+            //             dataMap: sub,
+            //           ),
+            //           Divide()
+            //         ],
+            //       ),
+            //   ],
+            // ),
           ],
         ),
       ),
@@ -132,9 +167,9 @@ class Subject extends StatelessWidget {
   Subject({Key? key, required this.dataMap}) : super(key: key);
   @override
   Widget build(BuildContext context) {
-    var subjectName = dataMap["name"];
-    var classTime = dataMap["time"];
-    var day = dataMap["day"];
+    var subjectName = dataMap["subject"];
+    var classTime = dataMap["fromTime"];
+    var day = dataMap["days"][0];
     var lw = MediaQuery.of(context).size.width;
     var lh = MediaQuery.of(context).size.height;
 
