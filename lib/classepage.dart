@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'addclass.dart';
 import 'widgets/bottombar.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 main() {
@@ -138,7 +137,8 @@ class Subject extends StatelessWidget {
   Widget build(BuildContext context) {
     var subjectName = dataMap["subject"];
     var classTime = dataMap["fromTime"];
-    var day = dataMap["days"][0];
+    var day = 'Mon';
+    //dataMap["days"][0];
     var lw = MediaQuery.of(context).size.width;
     var lh = MediaQuery.of(context).size.height;
 

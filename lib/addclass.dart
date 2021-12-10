@@ -1,5 +1,6 @@
 // ignore_for_file: prefer_const_constructors, use_key_in_widget_constructors
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -37,6 +38,8 @@ class MyCustomForm extends StatefulWidget {
 
   @override
   State<MyCustomForm> createState() => _MyCustomFormState();
+  static _MyCustomFormState? of(BuildContext context) =>
+      context.findAncestorStateOfType<_MyCustomFormState>();
 }
 
 class _MyCustomFormState extends State<MyCustomForm> {
@@ -49,6 +52,14 @@ class _MyCustomFormState extends State<MyCustomForm> {
     'toTime': null,
     'days': null
   };
+
+  final firestoreInstance = FirebaseFirestore.instance;
+
+  void SaveToDb() {
+    firestoreInstance.collection("classes").add(formData).then((value) {
+      print('Saved To Database :)');
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -104,24 +115,10 @@ class _MyCustomFormState extends State<MyCustomForm> {
               style: TextStyle(fontSize: ht / 30, fontWeight: FontWeight.w500),
             )),
             Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-              SizedBox(
-                width: wd / 4,
-                child: DateTimeField(
-                  format: format,
-                  decoration: InputDecoration(border: UnderlineInputBorder()),
-                  onShowPicker: (context, currentValue) async {
-                    final TimeOfDay? time = await showTimePicker(
-                      context: context,
-                      initialTime: TimeOfDay.fromDateTime(
-                          currentValue ?? DateTime.now()),
-                    );
-                    // print(DateTimeField.convert(time));
-                    formData['fromTime'] = DateTimeField.convert(time)
-                        .toString()
-                        .substring(11, 16);
-                    return time == null ? null : DateTimeField.convert(time);
-                  },
-                ),
+              BasicTimeField(
+                onTimeSelect: (classTime) {
+                  formData['fromTime'] = classTime.substring(11, 16);
+                },
               ),
               SizedBox(
                 width: wd / 9,
@@ -133,25 +130,11 @@ class _MyCustomFormState extends State<MyCustomForm> {
                   ),
                 ),
               ),
-              SizedBox(
-                width: wd / 4,
-                child: DateTimeField(
-                  format: format,
-                  decoration: InputDecoration(border: UnderlineInputBorder()),
-                  onShowPicker: (context, currentValue) async {
-                    final TimeOfDay? time = await showTimePicker(
-                      context: context,
-                      initialTime: TimeOfDay.fromDateTime(
-                          currentValue ?? DateTime.now()),
-                    );
-                    // print(DateTimeField.convert(time));
-                    formData['toTime'] = DateTimeField.convert(time)
-                        .toString()
-                        .substring(11, 16);
-                    return time == null ? null : DateTimeField.convert(time);
-                  },
-                ),
-              ),
+              BasicTimeField(
+                onTimeSelect: (classTime) {
+                  formData['toTime'] = classTime.substring(11, 16);
+                },
+              )
             ]),
             SizedBox(
               height: ht / 40,
@@ -172,6 +155,7 @@ class _MyCustomFormState extends State<MyCustomForm> {
                   child: Text('Add'),
                   onPressed: () {
                     formKey.currentState?.save();
+                    SaveToDb();
                     print(formData);
                   },
                 ),
@@ -193,29 +177,32 @@ class _MyCustomFormState extends State<MyCustomForm> {
   }
 }
 
-// class BasicTimeField extends StatelessWidget {
-//   final format = DateFormat.Hm();
-//   @override
-//   Widget build(BuildContext context) {
-//     var wd = MediaQuery.of(context).size.width;
-//     return SizedBox(
-//       width: wd / 4,
-//       child: DateTimeField(
-//         format: format,
-//         decoration: InputDecoration(border: UnderlineInputBorder()),
-//         onShowPicker: (context, currentValue) async {
-//           final TimeOfDay? time = await showTimePicker(
-//             context: context,
-//             initialTime: TimeOfDay.fromDateTime(currentValue ?? DateTime.now()),
-//           );
-//           // print(DateTimeField.convert(time));
+typedef TimeCallback(String classTime);
 
-//           return time == null ? null : DateTimeField.convert(time);
-//         },
-//       ),
-//     );
-//   }
-// }
+class BasicTimeField extends StatelessWidget {
+  final format = DateFormat.Hm();
+  final TimeCallback onTimeSelect;
+  BasicTimeField({required this.onTimeSelect});
+  @override
+  Widget build(BuildContext context) {
+    var wd = MediaQuery.of(context).size.width;
+    return SizedBox(
+      width: wd / 4,
+      child: DateTimeField(
+        format: format,
+        decoration: InputDecoration(border: UnderlineInputBorder()),
+        onShowPicker: (context, currentValue) async {
+          final TimeOfDay? time = await showTimePicker(
+            context: context,
+            initialTime: TimeOfDay.fromDateTime(currentValue ?? DateTime.now()),
+          );
+          onTimeSelect(DateTimeField.convert(time).toString());
+          return time == null ? null : DateTimeField.convert(time);
+        },
+      ),
+    );
+  }
+}
 
 String intDayToEnglish(int day) {
   if (day % 7 == DateTime.monday % 7) return 'Mon';
@@ -246,7 +233,6 @@ class DayPicker extends StatefulWidget {
 
 class _DayPickerState extends State<DayPicker> {
   final values2 = List.filled(7, false);
-
   @override
   Widget build(BuildContext context) {
     var ht = MediaQuery.of(context).size.height;

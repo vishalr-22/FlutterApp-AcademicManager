@@ -1,5 +1,6 @@
 // ignore_for_file: prefer_const_constructors
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -40,6 +41,20 @@ class MyCustomForm2 extends StatefulWidget {
 
 class _MyCustomForm2State extends State<MyCustomForm2> {
   final formKey = GlobalKey<FormState>();
+  final Map<String, dynamic> formData = {
+    'subjectName': null,
+    'title': null,
+    'dueDate': null,
+    'dueTime': null
+  };
+
+  final firestoreInstance = FirebaseFirestore.instance;
+
+  void SaveToDb() {
+    firestoreInstance.collection("Assignments").add(formData).then((value) {
+      print('Saved To Database :)');
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -65,6 +80,9 @@ class _MyCustomForm2State extends State<MyCustomForm2> {
                 border: OutlineInputBorder(),
                 hintText: 'Type Subject name here',
               ),
+              onSaved: (newValue) {
+                formData['subjectName'] = newValue;
+              },
             ),
             Padding(
               padding: EdgeInsets.fromLTRB(0, ht / 50, 0, ht / 70),
@@ -79,6 +97,9 @@ class _MyCustomForm2State extends State<MyCustomForm2> {
                 border: OutlineInputBorder(), // UnderlineInputBorder(),
                 hintText: 'Name of assignment',
               ),
+              onSaved: (newValue) {
+                formData['title'] = newValue;
+              },
             ),
             SizedBox(
               height: ht / 20,
@@ -101,7 +122,11 @@ class _MyCustomForm2State extends State<MyCustomForm2> {
                         fontStyle: FontStyle.italic,
                         fontWeight: FontWeight.w600),
                   ),
-                  BasicDateField(),
+                  BasicDateField(
+                    onDateSelect: (date) {
+                      formData['dueDate'] = 'Dec 13';
+                    },
+                  ),
                 ],
               ),
               SizedBox(width: wd / 30),
@@ -114,7 +139,11 @@ class _MyCustomForm2State extends State<MyCustomForm2> {
                         fontStyle: FontStyle.italic,
                         fontWeight: FontWeight.w600),
                   ),
-                  BasicTimeField()
+                  BasicTimeField(
+                    onTimeSelect: (dueTime) {
+                      formData['dueTime'] = dueTime.substring(11, 16);
+                    },
+                  )
                 ],
               )
             ]),
@@ -128,6 +157,8 @@ class _MyCustomForm2State extends State<MyCustomForm2> {
                   child: Text('Add'),
                   onPressed: () {
                     formKey.currentState?.save();
+                    SaveToDb();
+                    print(formData);
                   },
                 ),
                 const SizedBox(
@@ -148,35 +179,46 @@ class _MyCustomForm2State extends State<MyCustomForm2> {
   }
 }
 
+typedef void IntCallback(String date);
+
 class BasicDateField extends StatelessWidget {
-  final format = DateFormat("dd-MMM-yyyy");
+  final format = DateFormat.yMMMd();
+  final IntCallback onDateSelect;
+  var _selectedDate;
+  BasicDateField({required this.onDateSelect});
   @override
   Widget build(BuildContext context) {
     var wd = MediaQuery.of(context).size.width;
     return SizedBox(
-      width: wd / 2.5,
+      width: wd / 2.2,
       child: DateTimeField(
         format: format,
         decoration: InputDecoration(border: OutlineInputBorder()),
         onShowPicker: (context, currentValue) {
-          return showDatePicker(
+          _selectedDate = showDatePicker(
               context: context,
               firstDate: DateTime(1900),
               initialDate: currentValue ?? DateTime.now(),
               lastDate: DateTime(2100));
+          onDateSelect(_selectedDate.toString());
+          return _selectedDate;
         },
       ),
     );
   }
 }
 
+typedef TimeCallback(String dueTime);
+
 class BasicTimeField extends StatelessWidget {
   final format = DateFormat("hh:mm a");
+  final TimeCallback onTimeSelect;
+  BasicTimeField({required this.onTimeSelect});
   @override
   Widget build(BuildContext context) {
     var wd = MediaQuery.of(context).size.width;
     return SizedBox(
-      width: wd / 2.5,
+      width: wd / 2.8,
       child: DateTimeField(
         format: format,
         decoration: InputDecoration(border: OutlineInputBorder()),
@@ -185,6 +227,7 @@ class BasicTimeField extends StatelessWidget {
             context: context,
             initialTime: TimeOfDay.fromDateTime(currentValue ?? DateTime.now()),
           );
+          onTimeSelect(DateTimeField.convert(time).toString());
           return time == null ? null : DateTimeField.convert(time);
         },
       ),

@@ -3,7 +3,6 @@
 import 'package:flutter/material.dart';
 import 'addassignment.dart';
 import 'widgets/bottombar.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 void main() {
@@ -61,7 +60,7 @@ class AssignmentPage extends StatelessWidget {
                       },
                     )),
                 Container(
-                  padding: EdgeInsets.fromLTRB(wd / 9, lh / 20, 0, lh / 40),
+                  padding: EdgeInsets.fromLTRB(wd / 9, lh / 20, 0, lh / 60),
                   child: Text(
                     "Assignments",
                     style: TextStyle(color: Colors.white, fontSize: 25),
@@ -162,7 +161,7 @@ class Subject extends StatelessWidget {
                 child: Align(
                   alignment: Alignment.centerLeft,
                   child: Text(
-                    "$dueDate",
+                    "Due: $dueDate",
                     style: TextStyle(
                       color: Colors.black.withOpacity(0.5),
                       fontSize: 17,
