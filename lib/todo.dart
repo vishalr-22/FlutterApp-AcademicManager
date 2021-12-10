@@ -17,11 +17,12 @@ class _TodoPageState extends State<TodoPage> {
   List todos = List.empty();
   String title = "";
   String description = "";
+  // bool isComplete = false;
 
   @override
   void initState() {
     super.initState();
-    todos = ["Hello", "Hey There"];
+    todos = ["Hello", "Hey There", false];
   }
 
   createToDo() {
@@ -31,6 +32,7 @@ class _TodoPageState extends State<TodoPage> {
     Map<String, dynamic> todoList = {
       "todoTitle": title,
       "todoDesc": description,
+      // "complete": isComplete,
     };
 
     documentReference
@@ -45,6 +47,15 @@ class _TodoPageState extends State<TodoPage> {
     documentReference
         .delete()
         .whenComplete(() => print("deleted successfully"));
+  }
+
+  updateTodo(item) {
+    DocumentReference documentReference =
+        FirebaseFirestore.instance.collection("Task").doc(item);
+    documentReference.update(item);
+    // .updateData(item)
+    // .whenComplete(() => print("Task updated!"))
+    // .catchError((e) => print(e));
   }
 
   @override
@@ -121,6 +132,16 @@ class _TodoPageState extends State<TodoPage> {
                                 });
                               },
                               child: ListTile(
+                                // leading: Checkbox(
+                                //     activeColor: Colors.lightBlueAccent,
+                                //     value: documentSnapshot!["complete"],
+                                //     onChanged: (value) {
+                                //       setState(() {
+                                //         value = !value!;
+                                //         updateTodo(
+                                //             documentSnapshot["complete"]);
+                                //       });
+                                //     }),
                                 title: Text((documentSnapshot != null)
                                     ? (documentSnapshot["todoTitle"])
                                     : ""),
@@ -160,11 +181,13 @@ class _TodoPageState extends State<TodoPage> {
                     child: Column(
                       children: [
                         TextField(
+                          decoration: InputDecoration(hintText: 'Title'),
                           onChanged: (String value) {
                             title = value;
                           },
                         ),
                         TextField(
+                          decoration: InputDecoration(hintText: 'Description'),
                           onChanged: (String value) {
                             description = value;
                           },
