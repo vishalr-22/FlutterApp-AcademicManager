@@ -1,26 +1,76 @@
+// import 'dart:js_util';
 import 'package:flutter/material.dart';
 import 'editProfile.dart';
 import 'widgets/bottombar.dart';
 import 'main.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
-var username = 'R. Vishal';
-var sem = 'Sem V' ;
-var course = 'Computer Engineering';
-var college = 'K J Somaiya college of engineering';
+
+// var username = 'R. Vishal';
+// var sem = 'Sem V' ;
+// var course = 'Computer Engineering';
+// var college = 'K J Somaiya college of engineering';
+var username = '';
+var sem = '' ;
+var course = '';
+var college = '';
+
+final firestoreInstance = FirebaseFirestore.instance;
+    
+
+List details = [];
 void main() {
-  runApp(Profile());
+  runApp(MainProfile());
 }
 
-class Profile extends StatelessWidget {
-  const Profile({Key? key}) : super(key: key);
+void fetchData() {
+    firestoreInstance.collection("Profile").doc('QHZKsD7tgk0dp8XJJNDD').get().then((value) {
+        var x = value.data();
+        username = x!['username'];
+        sem = x['sem'];
+        course = x['course'];
+        college =  x['college'];
 
+        print(value.data());
+        print("jjj");
+     
+    });
+    // print(username);
+    // print(result);
+    // return this.y ;
+  }
+class MainProfile extends StatefulWidget {
+  const MainProfile({Key? key}) : super(key: key);
+
+  @override
+  State<MainProfile> createState() => _Profile();
+}
+
+
+class _Profile extends State<MainProfile> {
+  
+
+  _Profile(){
+    
+    fetchData();
+    
+    // // details = x;
+    // print(x);
+  }
+  
   @override
   Widget build(BuildContext context) {
     return MaterialApp(home: ProfilePage());
   }
 }
 
-class ProfilePage extends StatelessWidget {
+class ProfilePage extends StatefulWidget {
+  @override
+  _ProfilePageState createState() => _ProfilePageState();
+}
+
+class _ProfilePageState extends State<ProfilePage> {
   @override
   Widget build(context) {
     var lh = MediaQuery.of(context).size.height;
@@ -80,8 +130,13 @@ class ProfileHeader extends StatelessWidget {
   }
 }
 
-class ProfileCard extends StatelessWidget {
+class ProfileCard extends StatefulWidget {
   
+  @override
+  _ProfileCardState createState() => _ProfileCardState();
+}
+
+class _ProfileCardState extends State<ProfileCard> {
   @override
   Widget build(context) {
     var lw = MediaQuery.of(context).size.width;
@@ -129,8 +184,13 @@ class ProfileCard extends StatelessWidget {
   }
 }
 
-class ProfileDetails extends StatelessWidget {
+class ProfileDetails extends StatefulWidget {
   
+  @override
+  _ProfileDetailsState createState() => _ProfileDetailsState();
+}
+
+class _ProfileDetailsState extends State<ProfileDetails> {
   @override
   Widget build(context) {
     var lw = MediaQuery.of(context).size.width;

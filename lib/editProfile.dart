@@ -1,9 +1,22 @@
 import 'package:flutter/material.dart';
 import 'profile.dart' as Profile;
+import 'package:firebase_core/firebase_core.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+
+final firestoreInstance = FirebaseFirestore.instance;
 
 void main() {
   runApp(Edit());
 }
+
+void editData() {
+    firestoreInstance.collection("Profile").doc('QHZKsD7tgk0dp8XJJNDD').
+    update({"username":Profile.username , "sem":Profile.sem, "course":Profile.course, "college":Profile.college});
+    // print(username);
+    // print(result);
+    // return this.y ;
+  }
+
 
 class Edit extends StatelessWidget {
   const Edit({Key? key}) : super(key: key);
@@ -43,25 +56,25 @@ class EditHeader extends StatelessWidget {
     return Container(
       child: Row(
         children: [
+          // Container(
+          //     padding: EdgeInsets.fromLTRB(wd / 70, ht / 20, wd / 30, ht / 50),
+          //     child: GestureDetector(
+          //       onTap: () {
+          //         Navigator.push(
+          //             context,
+          //             MaterialPageRoute(
+          //                 builder: (context) => Profile.ProfilePage()));
+          //       },
+          //       child: Container(
+          //         child: Icon(
+          //           Icons.close,
+          //           color: Colors.white,
+          //           size: 40,
+          //         ),
+          //       ),
+          //     )),
           Container(
-              padding: EdgeInsets.fromLTRB(wd / 70, ht / 20, wd / 30, ht / 50),
-              child: GestureDetector(
-                onTap: () {
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => Profile.ProfilePage()));
-                },
-                child: Container(
-                  child: Icon(
-                    Icons.close,
-                    color: Colors.white,
-                    size: 40,
-                  ),
-                ),
-              )),
-          Container(
-            padding: EdgeInsets.fromLTRB(wd / 7, ht / 20, wd / 35, ht / 50),
+            padding: EdgeInsets.fromLTRB(wd / 40, ht / 20, wd / 4, ht / 50),
               
             alignment: AlignmentDirectional.center,
             child: Text(
@@ -74,6 +87,7 @@ class EditHeader extends StatelessWidget {
               
               child: GestureDetector(
                 onTap: () {
+                  editData();
                   Navigator.push(
                       context,
                       MaterialPageRoute(

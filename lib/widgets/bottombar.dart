@@ -50,7 +50,7 @@ class BottomNavBar extends StatelessWidget {
                   context, MaterialPageRoute(builder: (context) => MyApp()));
             } else if (index == 2) {
               Navigator.push(
-                  context, MaterialPageRoute(builder: (context) => Profile()));
+                  context, MaterialPageRoute(builder: (context) => MainProfile()));
             }
           }),
     );
