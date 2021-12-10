@@ -28,24 +28,6 @@ class _ClassPageState extends State<ClassPage> {
 
   @override
   Widget build(BuildContext context) {
-    List<Map> subjects = [
-      {
-        "subject": "WAK",
-        "fromTime": "13:30",
-        "days": ['Mon']
-      },
-      {
-        "subject": "RAD",
-        "fromTime": "10:30",
-        "days": ['Tue']
-      },
-      {
-        "subject": "PQR",
-        "fromTime": "15:15",
-        "days": ['Fri']
-      }
-    ];
-
     var lw = MediaQuery.of(context).size.width;
     var lh = MediaQuery.of(context).size.height;
     return MaterialApp(
@@ -122,19 +104,6 @@ class _ClassPageState extends State<ClassPage> {
                 }
               },
             ),
-            // Column(
-            //   children: [
-            //     for (Map sub in subjects)
-            //       Column(
-            //         children: [
-            //           Subject(
-            //             dataMap: sub,
-            //           ),
-            //           Divide()
-            //         ],
-            //       ),
-            //   ],
-            // ),
           ],
         ),
       ),

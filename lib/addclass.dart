@@ -41,6 +41,14 @@ class MyCustomForm extends StatefulWidget {
 
 class _MyCustomFormState extends State<MyCustomForm> {
   final formKey = GlobalKey<FormState>();
+  final format = DateFormat.Hm();
+  final Map<String, dynamic> formData = {
+    'subject': null,
+    'classLink': null,
+    'fromTime': null,
+    'toTime': null,
+    'days': null
+  };
 
   @override
   Widget build(BuildContext context) {
@@ -66,6 +74,9 @@ class _MyCustomFormState extends State<MyCustomForm> {
                 border: OutlineInputBorder(),
                 hintText: 'Type Subject name here',
               ),
+              onSaved: (newValue) {
+                formData['subject'] = newValue!;
+              },
             ),
             Padding(
               padding: EdgeInsets.fromLTRB(0, ht / 50, 0, ht / 70),
@@ -80,6 +91,9 @@ class _MyCustomFormState extends State<MyCustomForm> {
                 border: OutlineInputBorder(), // UnderlineInputBorder(),
                 hintText: 'Paste class link here',
               ),
+              onSaved: (newValue) {
+                formData['classLink'] = newValue!;
+              },
             ),
             SizedBox(
               height: ht / 50,
@@ -90,7 +104,25 @@ class _MyCustomFormState extends State<MyCustomForm> {
               style: TextStyle(fontSize: ht / 30, fontWeight: FontWeight.w500),
             )),
             Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-              BasicTimeField(),
+              SizedBox(
+                width: wd / 4,
+                child: DateTimeField(
+                  format: format,
+                  decoration: InputDecoration(border: UnderlineInputBorder()),
+                  onShowPicker: (context, currentValue) async {
+                    final TimeOfDay? time = await showTimePicker(
+                      context: context,
+                      initialTime: TimeOfDay.fromDateTime(
+                          currentValue ?? DateTime.now()),
+                    );
+                    // print(DateTimeField.convert(time));
+                    formData['fromTime'] = DateTimeField.convert(time)
+                        .toString()
+                        .substring(11, 16);
+                    return time == null ? null : DateTimeField.convert(time);
+                  },
+                ),
+              ),
               SizedBox(
                 width: wd / 9,
                 child: Center(
@@ -101,7 +133,25 @@ class _MyCustomFormState extends State<MyCustomForm> {
                   ),
                 ),
               ),
-              BasicTimeField()
+              SizedBox(
+                width: wd / 4,
+                child: DateTimeField(
+                  format: format,
+                  decoration: InputDecoration(border: UnderlineInputBorder()),
+                  onShowPicker: (context, currentValue) async {
+                    final TimeOfDay? time = await showTimePicker(
+                      context: context,
+                      initialTime: TimeOfDay.fromDateTime(
+                          currentValue ?? DateTime.now()),
+                    );
+                    // print(DateTimeField.convert(time));
+                    formData['toTime'] = DateTimeField.convert(time)
+                        .toString()
+                        .substring(11, 16);
+                    return time == null ? null : DateTimeField.convert(time);
+                  },
+                ),
+              ),
             ]),
             SizedBox(
               height: ht / 40,
@@ -122,6 +172,7 @@ class _MyCustomFormState extends State<MyCustomForm> {
                   child: Text('Add'),
                   onPressed: () {
                     formKey.currentState?.save();
+                    print(formData);
                   },
                 ),
                 const SizedBox(
@@ -142,36 +193,38 @@ class _MyCustomFormState extends State<MyCustomForm> {
   }
 }
 
-class BasicTimeField extends StatelessWidget {
-  final format = DateFormat.Hm();
-  @override
-  Widget build(BuildContext context) {
-    var wd = MediaQuery.of(context).size.width;
-    return SizedBox(
-      width: wd / 4,
-      child: DateTimeField(
-        format: format,
-        decoration: InputDecoration(border: UnderlineInputBorder()),
-        onShowPicker: (context, currentValue) async {
-          final TimeOfDay? time = await showTimePicker(
-            context: context,
-            initialTime: TimeOfDay.fromDateTime(currentValue ?? DateTime.now()),
-          );
-          return time == null ? null : DateTimeField.convert(time);
-        },
-      ),
-    );
-  }
-}
+// class BasicTimeField extends StatelessWidget {
+//   final format = DateFormat.Hm();
+//   @override
+//   Widget build(BuildContext context) {
+//     var wd = MediaQuery.of(context).size.width;
+//     return SizedBox(
+//       width: wd / 4,
+//       child: DateTimeField(
+//         format: format,
+//         decoration: InputDecoration(border: UnderlineInputBorder()),
+//         onShowPicker: (context, currentValue) async {
+//           final TimeOfDay? time = await showTimePicker(
+//             context: context,
+//             initialTime: TimeOfDay.fromDateTime(currentValue ?? DateTime.now()),
+//           );
+//           // print(DateTimeField.convert(time));
+
+//           return time == null ? null : DateTimeField.convert(time);
+//         },
+//       ),
+//     );
+//   }
+// }
 
 String intDayToEnglish(int day) {
-  if (day % 7 == DateTime.monday % 7) return 'Monday';
-  if (day % 7 == DateTime.tuesday % 7) return 'Tuesday';
-  if (day % 7 == DateTime.wednesday % 7) return 'Wednesday';
-  if (day % 7 == DateTime.thursday % 7) return 'Thursday';
-  if (day % 7 == DateTime.friday % 7) return 'Friday';
-  if (day % 7 == DateTime.saturday % 7) return 'Saturday';
-  if (day % 7 == DateTime.sunday % 7) return 'Sunday';
+  if (day % 7 == DateTime.monday % 7) return 'Mon';
+  if (day % 7 == DateTime.tuesday % 7) return 'Tue';
+  if (day % 7 == DateTime.wednesday % 7) return 'Wed';
+  if (day % 7 == DateTime.thursday % 7) return 'Thu';
+  if (day % 7 == DateTime.friday % 7) return 'Fri';
+  if (day % 7 == DateTime.saturday % 7) return 'Sat';
+  if (day % 7 == DateTime.sunday % 7) return 'Sun';
   throw '🐞 This should never have happened: $day';
 }
 

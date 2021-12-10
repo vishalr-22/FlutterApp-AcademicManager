@@ -25,11 +25,6 @@ class AssignmentPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    List<Map> assignments = [
-      {"name": "WAK", "dueDate": 'Sep 15'},
-      {"name": "RAD", "dueDate": 'Sep 16'},
-      {"name": "PQR", "dueDate": 'Sep 17'}
-    ];
     var wd = MediaQuery.of(context).size.width;
     var lh = MediaQuery.of(context).size.height;
     return MaterialApp(
@@ -81,25 +76,30 @@ class AssignmentPage extends StatelessWidget {
                 thickness: 2,
               ),
             ),
-            Column(
-              children: [
-              for (Map assign in assignments)
-                Column(
-                  children: [
-                    Subject(
-                      dataMap: assign,
-                    ),
-                    Divide()
-                  ],
-                )
-            ])
-            // Subject(),
-            // Divide(),
-            // Subject(),
-            // Divide(),
-            // Subject(),
-            // Divide(),
-            // Subject(),
+            FutureBuilder<QuerySnapshot>(
+              future:
+                  FirebaseFirestore.instance.collection('Assignments').get(),
+              builder: (BuildContext context,
+                  AsyncSnapshot<QuerySnapshot> snapshot) {
+                if (snapshot.hasData) {
+                  return Column(
+                    children: snapshot.data?.docs.map((doc) {
+                          return Column(
+                            children: [
+                              Subject(
+                                  dataMap: doc.data() as Map<dynamic, dynamic>),
+                              Divide()
+                            ],
+                          );
+                        }).toList() ??
+                        [],
+                  );
+                } else {
+                  // or your loading widget here
+                  return Text("Loading....");
+                }
+              },
+            ),
           ],
         ),
       ),
@@ -130,7 +130,7 @@ class Subject extends StatelessWidget {
   Widget build(BuildContext context) {
     var wd = MediaQuery.of(context).size.width;
     var lh = MediaQuery.of(context).size.height;
-    var subjectName = dataMap["name"];
+    var subjectName = dataMap["title"];
     var dueDate = dataMap["dueDate"];
 
     return (Row(mainAxisAlignment: MainAxisAlignment.center, children: [
