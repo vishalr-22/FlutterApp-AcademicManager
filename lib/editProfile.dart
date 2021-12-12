@@ -38,11 +38,12 @@ class MyCustomForm extends StatefulWidget {
     return EditProfilePage();
   }
 }
+final _formKey = GlobalKey<FormState>();
 
 class EditProfilePage extends State<MyCustomForm> {
   @override
   Widget build(context) {
-    final _formKey = GlobalKey<FormState>();
+    
     var ht = MediaQuery.of(context).size.height;
     var wd = MediaQuery.of(context).size.width;
     return Scaffold(
@@ -108,7 +109,8 @@ class EditProfilePage extends State<MyCustomForm> {
                               if (value == null || value.isEmpty) {
                                 return 'Please enter some text';
                               }
-                              return null;
+                              
+                              // return null;
                             },
                             style: TextStyle(color: Colors.white),
                             decoration: InputDecoration(
@@ -152,7 +154,7 @@ class EditProfilePage extends State<MyCustomForm> {
                               if (value == null || value.isEmpty) {
                                 return 'Please enter some text';
                               }
-                              return null;
+                              // return null;
                             },
                             style: TextStyle(color: Colors.white),
                             decoration: InputDecoration(
@@ -196,7 +198,7 @@ class EditProfilePage extends State<MyCustomForm> {
                               if (value == null || value.isEmpty) {
                                 return 'Please enter some text';
                               }
-                              return null;
+                              // return null;
                             },
                             style: TextStyle(color: Colors.white),
                             decoration: InputDecoration(
@@ -239,7 +241,7 @@ class EditProfilePage extends State<MyCustomForm> {
                               if (value == null || value.isEmpty) {
                                 return 'Please enter some text';
                               }
-                              return null;
+                              // return null;
                             },
                             style: TextStyle(color: Colors.white),
                             decoration: InputDecoration(
