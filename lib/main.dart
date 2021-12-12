@@ -21,6 +21,9 @@ void main() async {
   runApp(MyApp());
 }
 
+var username = "Vishal";
+var semester = "4";
+
 class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
@@ -86,39 +89,56 @@ class HelloTag extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    const _username = 'Piyush';
-    const _semester = 5;
     var lw = MediaQuery.of(context).size.width;
     var lh = MediaQuery.of(context).size.height;
-    return Container(
-        padding: EdgeInsets.fromLTRB(lw / 10, lw / 20, lw / 20, lw / 20),
-        color: Colors.indigo[800],
-        width: double.infinity,
-        height: lh / 8,
-        child: Column(
-          children: [
-            Align(
-              alignment: Alignment.centerLeft,
-              child: Text(
-                'Hello $_username !',
-                style: TextStyle(fontSize: lh / 30, color: Colors.white),
-              ),
-            ),
-            SizedBox(
-              height: 5,
-            ),
-            Align(
-              alignment: Alignment.centerLeft,
-              child: Text(
-                'Sem $_semester',
-                style: TextStyle(
-                    fontSize: lh / 50,
-                    color: Colors.white,
-                    fontWeight: FontWeight.w700),
-              ),
-            )
-          ],
-        ));
+    CollectionReference user = FirebaseFirestore.instance.collection('Profile');
+    return FutureBuilder<DocumentSnapshot>(
+      future: user.doc('QHZKsD7tgk0dp8XJJNDD').get(),
+      builder:
+          (BuildContext context, AsyncSnapshot<DocumentSnapshot> snapshot) {
+        if (snapshot.hasError) {
+          return Text("Something went wrong");
+        }
+
+        if (snapshot.connectionState == ConnectionState.done) {
+          Map<String, dynamic> data =
+              snapshot.data!.data() as Map<String, dynamic>;
+          username = data['username'];
+          semester = data['sem'];
+          return Container(
+              padding: EdgeInsets.fromLTRB(lw / 10, lw / 20, lw / 20, lw / 20),
+              color: Colors.indigo[800],
+              width: double.infinity,
+              height: lh / 8,
+              child: Column(
+                children: [
+                  Align(
+                    alignment: Alignment.centerLeft,
+                    child: Text(
+                      'Hello $username !',
+                      style: TextStyle(fontSize: lh / 30, color: Colors.white),
+                    ),
+                  ),
+                  SizedBox(
+                    height: 5,
+                  ),
+                  Align(
+                    alignment: Alignment.centerLeft,
+                    child: Text(
+                      'Sem $semester',
+                      style: TextStyle(
+                          fontSize: lh / 50,
+                          color: Colors.white,
+                          fontWeight: FontWeight.w700),
+                    ),
+                  )
+                ],
+              ));
+        } else {
+          return Text("Loading...");
+        }
+      },
+    );
   }
 }
 
