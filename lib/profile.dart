@@ -255,7 +255,7 @@ class ProfileEdit extends StatelessWidget {
     return GestureDetector(
       onTap: () {
           Navigator.push(
-              context, MaterialPageRoute(builder: (context) => EditProfilePage()));
+              context, MaterialPageRoute(builder: (context) => Edit()));
         },
       child: Container(
           padding: new EdgeInsets.fromLTRB(15, 18, 15, 18),
