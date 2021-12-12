@@ -3,21 +3,14 @@ import 'package:flutter/material.dart';
 import 'editProfile.dart';
 import 'widgets/bottombar.dart';
 import 'main.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-
-// var username = 'R. Vishal';
-// var sem = 'Sem V' ;
-// var course = 'Computer Engineering';
-// var college = 'K J Somaiya college of engineering';
 var username = '';
-var sem = '' ;
+var sem = '';
 var course = '';
 var college = '';
 
 final firestoreInstance = FirebaseFirestore.instance;
-    
 
 List details = [];
 void main() {
@@ -25,21 +18,21 @@ void main() {
 }
 
 void fetchData() {
-    firestoreInstance.collection("Profile").doc('QHZKsD7tgk0dp8XJJNDD').get().then((value) {
-        var x = value.data();
-        username = x!['username'];
-        sem = x['sem'];
-        course = x['course'];
-        college =  x['college'];
+  firestoreInstance
+      .collection("Profile")
+      .doc('QHZKsD7tgk0dp8XJJNDD')
+      .get()
+      .then((value) {
+    var x = value.data();
+    username = x!['username'];
+    sem = x['sem'];
+    course = x['course'];
+    college = x['college'];
 
-        print(value.data());
-        print("jjj");
-     
-    });
-    // print(username);
-    // print(result);
-    // return this.y ;
-  }
+    print(value.data());
+  });
+}
+
 class MainProfile extends StatefulWidget {
   const MainProfile({Key? key}) : super(key: key);
 
@@ -47,18 +40,11 @@ class MainProfile extends StatefulWidget {
   State<MainProfile> createState() => _Profile();
 }
 
-
 class _Profile extends State<MainProfile> {
-  
-
-  _Profile(){
-    
+  _Profile() {
     fetchData();
-    
-    // // details = x;
-    // print(x);
   }
-  
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(home: ProfilePage());
@@ -131,7 +117,6 @@ class ProfileHeader extends StatelessWidget {
 }
 
 class ProfileCard extends StatefulWidget {
-  
   @override
   _ProfileCardState createState() => _ProfileCardState();
 }
@@ -173,7 +158,7 @@ class _ProfileCardState extends State<ProfileCard> {
           Container(
             alignment: AlignmentDirectional.center,
             child: new Text(
-              "$sem",
+              "Sem $sem",
               style: TextStyle(
                 fontSize: lh / 30,
                 color: Colors.black.withOpacity(0.5),
@@ -185,7 +170,6 @@ class _ProfileCardState extends State<ProfileCard> {
 }
 
 class ProfileDetails extends StatefulWidget {
-  
   @override
   _ProfileDetailsState createState() => _ProfileDetailsState();
 }
@@ -233,14 +217,12 @@ class _ProfileDetailsState extends State<ProfileDetails> {
                   //   style: TextStyle(color: Colors.black, fontSize: lh / 38),
                   // )
                   Flexible(
-                    child: Text(
+                      child: Text(
                     " $college",
                     style: TextStyle(color: Colors.black, fontSize: lh / 38),
                     maxLines: 2,
                     softWrap: true,
-                  )
-                  
-                  )
+                  ))
                 ],
               ),
             )
@@ -254,9 +236,9 @@ class ProfileEdit extends StatelessWidget {
   Widget build(context) {
     return GestureDetector(
       onTap: () {
-          Navigator.push(
-              context, MaterialPageRoute(builder: (context) => Edit()));
-        },
+        Navigator.push(
+            context, MaterialPageRoute(builder: (context) => Edit()));
+      },
       child: Container(
           padding: new EdgeInsets.fromLTRB(15, 18, 15, 18),
           width: 155,
