@@ -1,5 +1,7 @@
 // ignore_for_file: use_key_in_widget_constructors
 
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
 import 'addassignment.dart';
 import 'widgets/bottombar.dart';
@@ -88,8 +90,22 @@ class AssignmentPage extends StatelessWidget {
                       },
                     );
                   } else {
-                    // or your loading widget here
-                    return Text("Loading....");
+                    return Column(children: const <Widget>[
+                      SizedBox(
+                        width: 60,
+                        height: 60,
+                        child: CircularProgressIndicator(
+                          color: Colors.amber,
+                        ),
+                      ),
+                      Padding(
+                        padding: EdgeInsets.only(top: 20),
+                        child: Text(
+                          'Loading...',
+                          style: TextStyle(fontSize: 20, color: Colors.white),
+                        ),
+                      )
+                    ]);
                   }
                 },
               ),

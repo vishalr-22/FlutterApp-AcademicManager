@@ -26,7 +26,7 @@ class AddClass extends StatelessWidget {
         appBar: AppBar(
           title: const Text(appTitle),
         ),
-        body: const MyCustomForm(),
+        body: SingleChildScrollView(child: const MyCustomForm()),
         bottomNavigationBar: SizedBox(height: lh / 10, child: BottomNavBar()),
       ),
     );
@@ -56,7 +56,7 @@ class _MyCustomFormState extends State<MyCustomForm> {
   final firestoreInstance = FirebaseFirestore.instance;
 
   void SaveToDb() {
-    firestoreInstance.collection("classes").add(formData).then((value) {
+    firestoreInstance.collection("Classes").add(formData).then((value) {
       print('Saved To Database :)');
     });
   }
@@ -81,6 +81,12 @@ class _MyCustomFormState extends State<MyCustomForm> {
               ),
             ),
             TextFormField(
+              validator: (value) {
+                if (value == null || value.isEmpty) {
+                  return 'Please enter a Subject name';
+                }
+                return null;
+              },
               decoration: InputDecoration(
                 border: OutlineInputBorder(),
                 hintText: 'Type Subject name here',
@@ -98,6 +104,12 @@ class _MyCustomFormState extends State<MyCustomForm> {
               ),
             ),
             TextFormField(
+              validator: (value) {
+                if (value == null || value.isEmpty) {
+                  return 'Please paste a class link';
+                }
+                return null;
+              },
               decoration: InputDecoration(
                 border: OutlineInputBorder(), // UnderlineInputBorder(),
                 hintText: 'Paste class link here',
@@ -144,7 +156,13 @@ class _MyCustomFormState extends State<MyCustomForm> {
               "Select days of week",
               style: TextStyle(fontSize: ht / 30, fontWeight: FontWeight.w500),
             )),
-            DayPicker(),
+            DayPicker(
+              callback: (p0) {
+                setState(() {
+                  formData['days'] = p0;
+                });
+              },
+            ),
             SizedBox(
               height: ht / 20,
             ),
@@ -154,10 +172,16 @@ class _MyCustomFormState extends State<MyCustomForm> {
                 ElevatedButton(
                   child: Text('Add'),
                   onPressed: () {
-                    formKey.currentState?.save();
-                    formKey.currentState?.reset();
-                    SaveToDb();
-                    print(formData);
+                    if (formKey.currentState!.validate()) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(
+                            content: Text('Class link saved successfully')),
+                      );
+                      formKey.currentState?.save();
+                      formKey.currentState?.reset();
+                      SaveToDb();
+                      print('$formData');
+                    }
                   },
                 ),
                 const SizedBox(
@@ -190,6 +214,12 @@ class BasicTimeField extends StatelessWidget {
     return SizedBox(
       width: wd / 4,
       child: DateTimeField(
+        validator: (value) {
+          if (value == null) {
+            return 'Select time!';
+          }
+          return null;
+        },
         format: format,
         decoration: InputDecoration(border: UnderlineInputBorder()),
         onShowPicker: (context, currentValue) async {
@@ -220,22 +250,26 @@ String valuesToEnglishDays(List<bool?> values, bool? searchedValue) {
   final days = <String>[];
   for (int i = 0; i < values.length; i++) {
     final v = values[i];
-    // Use v == true, as the value could be null, as well (disabled days).
     if (v == searchedValue) days.add(intDayToEnglish(i));
   }
   if (days.isEmpty) return '';
   return days.join(', ');
 }
 
-typedef void DaysCallback(String dayList);
-
 class DayPicker extends StatefulWidget {
+  const DayPicker({
+    Key? key,
+    required this.callback,
+  }) : super(key: key);
+
+  final Function(dynamic) callback;
   @override
   _DayPickerState createState() => _DayPickerState();
 }
 
 class _DayPickerState extends State<DayPicker> {
   final values2 = List.filled(7, false);
+  var dayList;
   @override
   Widget build(BuildContext context) {
     var ht = MediaQuery.of(context).size.height;
@@ -254,6 +288,8 @@ class _DayPickerState extends State<DayPicker> {
             setState(() {
               values2[v % 7] = !values2[v % 7];
             });
+            dayList = valuesToEnglishDays(values2, true);
+            widget.callback(dayList);
           },
           values: values2,
           selectedFillColor: Colors.amber,

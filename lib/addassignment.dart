@@ -1,4 +1,4 @@
-// ignore_for_file: prefer_const_constructors, non_constant_identifier_names
+// ignore_for_file: prefer_const_constructors, non_constant_identifier_names, prefer_generic_function_type_aliases, must_be_immutable, prefer_typing_uninitialized_variables, use_key_in_widget_constructors
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
@@ -76,6 +76,12 @@ class _MyCustomForm2State extends State<MyCustomForm2> {
               ),
             ),
             TextFormField(
+              validator: (value) {
+                if (value == null || value.isEmpty) {
+                  return 'Please enter a Subject name';
+                }
+                return null;
+              },
               decoration: InputDecoration(
                 border: OutlineInputBorder(),
                 hintText: 'Type Subject name here',
@@ -93,6 +99,12 @@ class _MyCustomForm2State extends State<MyCustomForm2> {
               ),
             ),
             TextFormField(
+              validator: (value) {
+                if (value == null || value.isEmpty) {
+                  return 'Please provide assignment name';
+                }
+                return null;
+              },
               decoration: InputDecoration(
                 border: OutlineInputBorder(), // UnderlineInputBorder(),
                 hintText: 'Name of assignment',
@@ -156,10 +168,16 @@ class _MyCustomForm2State extends State<MyCustomForm2> {
                 ElevatedButton(
                   child: Text('Add'),
                   onPressed: () {
-                    formKey.currentState?.save();
-                    formKey.currentState?.reset();
-                    SaveToDb();
-                    print('$formData');
+                    if (formKey.currentState!.validate()) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(
+                            content: Text('Assignment added successfully')),
+                      );
+                      formKey.currentState?.save();
+                      formKey.currentState?.reset();
+                      SaveToDb();
+                      print('$formData');
+                    }
                   },
                 ),
                 const SizedBox(
@@ -193,6 +211,12 @@ class BasicDateField extends StatelessWidget {
     return SizedBox(
       width: wd / 2.2,
       child: DateTimeField(
+        validator: (value) {
+          if (value == null) {
+            return 'Please provide a due date!';
+          }
+          return null;
+        },
         format: format,
         decoration: InputDecoration(border: OutlineInputBorder()),
         onShowPicker: (context, currentValue) async {
@@ -228,7 +252,12 @@ class BasicTimeField extends StatelessWidget {
             context: context,
             initialTime: TimeOfDay.fromDateTime(currentValue ?? DateTime.now()),
           );
-          onTimeSelect(DateTimeField.convert(time).toString());
+          if (time == null) {
+            onTimeSelect(DateTimeField.convert(TimeOfDay(hour: 23, minute: 59))
+                .toString());
+          } else {
+            onTimeSelect(DateTimeField.convert(time).toString());
+          }
           return time == null ? null : DateTimeField.convert(time);
         },
       ),

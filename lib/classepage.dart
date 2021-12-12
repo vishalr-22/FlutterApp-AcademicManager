@@ -74,7 +74,7 @@ class _ClassPageState extends State<ClassPage> {
             ),
             Expanded(
               child: FutureBuilder<QuerySnapshot>(
-                future: FirebaseFirestore.instance.collection('classes').get(),
+                future: FirebaseFirestore.instance.collection('Classes').get(),
                 builder: (BuildContext context,
                     AsyncSnapshot<QuerySnapshot> snapshot) {
                   if (snapshot.hasData) {
@@ -93,7 +93,22 @@ class _ClassPageState extends State<ClassPage> {
                     );
                   } else {
                     // or your loading widget here
-                    return Text("Loading....");
+                    return Column(children: const <Widget>[
+                      SizedBox(
+                        width: 60,
+                        height: 60,
+                        child: CircularProgressIndicator(
+                          color: Colors.amber,
+                        ),
+                      ),
+                      Padding(
+                        padding: EdgeInsets.only(top: 20),
+                        child: Text(
+                          'Loading...',
+                          style: TextStyle(fontSize: 20, color: Colors.white),
+                        ),
+                      )
+                    ]);
                   }
                 },
               ),
@@ -131,9 +146,9 @@ class Subject extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var subjectName = dataMap["subject"];
-    var classTime = dataMap["fromTime"];
-    var day = 'Mon';
-    //dataMap["days"][0];
+    var startTime = dataMap["fromTime"];
+    var endTime = dataMap["toTime"];
+    var day = dataMap["days"].toString().substring(0, 3);
     var lw = MediaQuery.of(context).size.width;
     var lh = MediaQuery.of(context).size.height;
 
@@ -166,7 +181,7 @@ class Subject extends StatelessWidget {
                 child: Align(
                   alignment: Alignment.centerLeft,
                   child: Text(
-                    "$classTime",
+                    "$startTime - $endTime",
                     style: TextStyle(
                       color: Colors.black.withOpacity(0.5),
                       fontSize: lh / 40,
