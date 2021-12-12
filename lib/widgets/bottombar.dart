@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import '../main.dart';
 import '../profile.dart';
+import '../calendarpage.dart';
+
 
 class BottomNavBar extends StatelessWidget {
   const BottomNavBar({Key? key}) : super(key: key);
@@ -51,7 +53,11 @@ class BottomNavBar extends StatelessWidget {
             } else if (index == 2) {
               Navigator.push(
                   context, MaterialPageRoute(builder: (context) => MainProfile()));
+            } else if (index == 0) {
+              Navigator.push(
+                  context, MaterialPageRoute(builder: (context) => calendarpage()));
             }
+
           }),
     );
   }
