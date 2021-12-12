@@ -14,14 +14,6 @@ class AssignmentPage extends StatelessWidget {
 
   final firestoreInstance = FirebaseFirestore.instance;
 
-  void fetchData() {
-    firestoreInstance.collection("assignment").get().then((querySnapshot) {
-      querySnapshot.docs.forEach((result) {
-        print(result.data());
-      });
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
     var wd = MediaQuery.of(context).size.width;
@@ -75,29 +67,32 @@ class AssignmentPage extends StatelessWidget {
                 thickness: 2,
               ),
             ),
-            FutureBuilder<QuerySnapshot>(
-              future:
-                  FirebaseFirestore.instance.collection('Assignments').get(),
-              builder: (BuildContext context,
-                  AsyncSnapshot<QuerySnapshot> snapshot) {
-                if (snapshot.hasData) {
-                  return Column(
-                    children: snapshot.data?.docs.map((doc) {
-                          return Column(
-                            children: [
-                              Subject(
-                                  dataMap: doc.data() as Map<dynamic, dynamic>),
-                              Divide()
-                            ],
-                          );
-                        }).toList() ??
-                        [],
-                  );
-                } else {
-                  // or your loading widget here
-                  return Text("Loading....");
-                }
-              },
+            Expanded(
+              child: FutureBuilder<QuerySnapshot>(
+                future:
+                    FirebaseFirestore.instance.collection('Assignments').get(),
+                builder: (BuildContext context,
+                    AsyncSnapshot<QuerySnapshot> snapshot) {
+                  if (snapshot.hasData) {
+                    return ListView.builder(
+                      itemCount: snapshot.data!.docs.length,
+                      itemBuilder: (context, index) {
+                        return Column(
+                          children: [
+                            Subject(
+                                dataMap: snapshot.data!.docs[index].data()
+                                    as Map<dynamic, dynamic>),
+                            Divide()
+                          ],
+                        );
+                      },
+                    );
+                  } else {
+                    // or your loading widget here
+                    return Text("Loading....");
+                  }
+                },
+              ),
             ),
           ],
         ),
@@ -131,6 +126,7 @@ class Subject extends StatelessWidget {
     var lh = MediaQuery.of(context).size.height;
     var subjectName = dataMap["title"];
     var dueDate = dataMap["dueDate"];
+    var dueTime = dataMap["dueTime"];
 
     return (Row(mainAxisAlignment: MainAxisAlignment.center, children: [
       Container(
@@ -161,7 +157,7 @@ class Subject extends StatelessWidget {
                 child: Align(
                   alignment: Alignment.centerLeft,
                   child: Text(
-                    "Due: $dueDate",
+                    "Due: $dueDate ($dueTime)",
                     style: TextStyle(
                       color: Colors.black.withOpacity(0.5),
                       fontSize: 17,

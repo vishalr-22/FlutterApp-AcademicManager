@@ -17,14 +17,6 @@ class ClassPage extends StatefulWidget {
 class _ClassPageState extends State<ClassPage> {
   final firestoreInstance = FirebaseFirestore.instance;
 
-  // void fetchData() {
-  //   firestoreInstance.collection("classes").get().then((querySnapshot) {
-  //     querySnapshot.docs.forEach((result) {
-  //       print(result.data());
-  //     });
-  //   });
-  // }
-
   @override
   Widget build(BuildContext context) {
     var lw = MediaQuery.of(context).size.width;
@@ -73,35 +65,38 @@ class _ClassPageState extends State<ClassPage> {
               ],
             ),
             Container(
-              padding: EdgeInsets.fromLTRB(0, 0, 0, lh / 25),
+              padding: EdgeInsets.fromLTRB(0, 0, 0, lh / 30),
               // ignore: prefer_const_constructors
               child: Divider(
                 color: Colors.white,
                 thickness: 2,
               ),
             ),
-            FutureBuilder<QuerySnapshot>(
-              future: FirebaseFirestore.instance.collection('classes').get(),
-              builder: (BuildContext context,
-                  AsyncSnapshot<QuerySnapshot> snapshot) {
-                if (snapshot.hasData) {
-                  return Column(
-                    children: snapshot.data?.docs.map((doc) {
-                          return Column(
-                            children: [
-                              Subject(
-                                  dataMap: doc.data() as Map<dynamic, dynamic>),
-                              Divide()
-                            ],
-                          );
-                        }).toList() ??
-                        [],
-                  );
-                } else {
-                  // or your loading widget here
-                  return Text("Loading....");
-                }
-              },
+            Expanded(
+              child: FutureBuilder<QuerySnapshot>(
+                future: FirebaseFirestore.instance.collection('classes').get(),
+                builder: (BuildContext context,
+                    AsyncSnapshot<QuerySnapshot> snapshot) {
+                  if (snapshot.hasData) {
+                    return ListView.builder(
+                      itemCount: snapshot.data!.docs.length,
+                      itemBuilder: (context, index) {
+                        return Column(
+                          children: [
+                            Subject(
+                                dataMap: snapshot.data!.docs[index].data()
+                                    as Map<dynamic, dynamic>),
+                            Divide()
+                          ],
+                        );
+                      },
+                    );
+                  } else {
+                    // or your loading widget here
+                    return Text("Loading....");
+                  }
+                },
+              ),
             ),
           ],
         ),

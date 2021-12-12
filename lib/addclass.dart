@@ -155,6 +155,7 @@ class _MyCustomFormState extends State<MyCustomForm> {
                   child: Text('Add'),
                   onPressed: () {
                     formKey.currentState?.save();
+                    formKey.currentState?.reset();
                     SaveToDb();
                     print(formData);
                   },
@@ -225,6 +226,8 @@ String valuesToEnglishDays(List<bool?> values, bool? searchedValue) {
   if (days.isEmpty) return '';
   return days.join(', ');
 }
+
+typedef void DaysCallback(String dayList);
 
 class DayPicker extends StatefulWidget {
   @override

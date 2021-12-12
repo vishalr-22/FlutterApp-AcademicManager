@@ -1,4 +1,4 @@
-// ignore_for_file: prefer_const_constructors
+// ignore_for_file: prefer_const_constructors, non_constant_identifier_names
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
@@ -124,7 +124,7 @@ class _MyCustomForm2State extends State<MyCustomForm2> {
                   ),
                   BasicDateField(
                     onDateSelect: (date) {
-                      formData['dueDate'] = 'Dec 13';
+                      formData['dueDate'] = date;
                     },
                   ),
                 ],
@@ -157,8 +157,9 @@ class _MyCustomForm2State extends State<MyCustomForm2> {
                   child: Text('Add'),
                   onPressed: () {
                     formKey.currentState?.save();
+                    formKey.currentState?.reset();
                     SaveToDb();
-                    print(formData);
+                    print('$formData');
                   },
                 ),
                 const SizedBox(
@@ -179,11 +180,11 @@ class _MyCustomForm2State extends State<MyCustomForm2> {
   }
 }
 
-typedef void IntCallback(String date);
+typedef void DateCallback(String date);
 
 class BasicDateField extends StatelessWidget {
   final format = DateFormat.yMMMd();
-  final IntCallback onDateSelect;
+  final DateCallback onDateSelect;
   var _selectedDate;
   BasicDateField({required this.onDateSelect});
   @override
@@ -194,13 +195,13 @@ class BasicDateField extends StatelessWidget {
       child: DateTimeField(
         format: format,
         decoration: InputDecoration(border: OutlineInputBorder()),
-        onShowPicker: (context, currentValue) {
-          _selectedDate = showDatePicker(
+        onShowPicker: (context, currentValue) async {
+          _selectedDate = await showDatePicker(
               context: context,
               firstDate: DateTime(1900),
               initialDate: currentValue ?? DateTime.now(),
               lastDate: DateTime(2100));
-          onDateSelect(_selectedDate.toString());
+          onDateSelect(format.format(_selectedDate).toString());
           return _selectedDate;
         },
       ),
