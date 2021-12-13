@@ -84,8 +84,11 @@ class _ClassPageState extends State<ClassPage> {
                         return Column(
                           children: [
                             Subject(
-                                dataMap: snapshot.data!.docs[index].data()
-                                    as Map<dynamic, dynamic>),
+                              dataMap: snapshot.data!.docs[index].data()
+                                  as Map<dynamic, dynamic>,
+                              docId: snapshot.data!.docs[index].reference.id
+                                  .toString(),
+                            ),
                             Divide()
                           ],
                         );
@@ -141,16 +144,31 @@ class Divide extends StatelessWidget {
 
 class Subject extends StatelessWidget {
   Map dataMap;
+  var docId;
+  CollectionReference classes =
+      FirebaseFirestore.instance.collection('Classes');
 
-  Subject({Key? key, required this.dataMap}) : super(key: key);
+  Future<void> deleteClass() {
+    return classes
+        .doc(docId)
+        .delete()
+        .then((value) => print("Class Deleted"))
+        .catchError((error) => print("Failed to delete Class: $error"));
+  }
+
+  Subject({Key? key, required this.dataMap, required this.docId})
+      : super(key: key);
   @override
   Widget build(BuildContext context) {
+    //var docId = dataMap[""]
     var subjectName = dataMap["subject"];
     var startTime = dataMap["fromTime"];
     var endTime = dataMap["toTime"];
     var day = dataMap["days"].toString().substring(0, 3);
     var lw = MediaQuery.of(context).size.width;
     var lh = MediaQuery.of(context).size.height;
+    print(docId);
+    print(dataMap);
 
     return (Row(mainAxisAlignment: MainAxisAlignment.center, children: [
       Container(
@@ -215,9 +233,11 @@ class Subject extends StatelessWidget {
           padding: EdgeInsets.fromLTRB(lw / 80, lh / 200, lw / 80, lh / 200),
           child: IconButton(
               iconSize: lh / 35,
-              onPressed: () {},
+              onPressed: () {
+                deleteClass();
+              },
               icon: Icon(
-                Icons.edit,
+                Icons.delete_outline,
                 color: Colors.white,
               ))),
     ]));

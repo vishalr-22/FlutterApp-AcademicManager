@@ -82,8 +82,11 @@ class AssignmentPage extends StatelessWidget {
                         return Column(
                           children: [
                             Subject(
-                                dataMap: snapshot.data!.docs[index].data()
-                                    as Map<dynamic, dynamic>),
+                              dataMap: snapshot.data!.docs[index].data()
+                                  as Map<dynamic, dynamic>,
+                              docId: snapshot.data!.docs[index].reference.id
+                                  .toString(),
+                            ),
                             Divide()
                           ],
                         );
@@ -134,11 +137,23 @@ class Divide extends StatelessWidget {
 
 class Subject extends StatelessWidget {
   Map dataMap;
+  var docId;
+  CollectionReference assignments =
+      FirebaseFirestore.instance.collection('Assignments');
 
-  Subject({Key? key, required this.dataMap}) : super(key: key);
+  Future<void> deleteAssignment() {
+    return assignments
+        .doc(docId)
+        .delete()
+        .then((value) => print("Assignment Deleted"))
+        .catchError((error) => print("Failed to delete Assignment: $error"));
+  }
+
+  Subject({Key? key, required this.dataMap, required this.docId})
+      : super(key: key);
   @override
   Widget build(BuildContext context) {
-    var wd = MediaQuery.of(context).size.width;
+    var lw = MediaQuery.of(context).size.width;
     var lh = MediaQuery.of(context).size.height;
     var subjectName = dataMap["title"];
     var dueDate = dataMap["dueDate"];
@@ -188,11 +203,19 @@ class Subject extends StatelessWidget {
               border: Border.all(color: Colors.white),
               borderRadius: BorderRadius.circular(5)),
           margin: const EdgeInsets.only(left: 10.0, right: 0.0),
-          padding: EdgeInsets.fromLTRB(wd / 21, wd / 21, wd / 21, wd / 21),
-          child: Icon(
-            Icons.edit,
-            color: Colors.white,
-          )),
+          padding: EdgeInsets.fromLTRB(lw / 80, lh / 200, lw / 80, lh / 200),
+          child: IconButton(
+              iconSize: lh / 30,
+              onPressed: () {
+                deleteAssignment();
+                // setState(() {});
+              },
+              icon: Icon(
+                Icons.delete_outline,
+                color: Colors.white,
+              ))),
     ]));
   }
+
+  void setState(Null Function() param0) {}
 }

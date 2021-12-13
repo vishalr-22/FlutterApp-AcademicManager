@@ -38,12 +38,12 @@ class MyCustomForm extends StatefulWidget {
     return EditProfilePage();
   }
 }
+
 final _formKey = GlobalKey<FormState>();
 
 class EditProfilePage extends State<MyCustomForm> {
   @override
   Widget build(context) {
-    
     var ht = MediaQuery.of(context).size.height;
     var wd = MediaQuery.of(context).size.width;
     return Scaffold(
@@ -67,13 +67,13 @@ class EditProfilePage extends State<MyCustomForm> {
                         ),
                       ),
                       Container(
-                        padding: EdgeInsets.fromLTRB(wd / 40, ht/80, 0, 0),
+                        padding: EdgeInsets.fromLTRB(wd / 40, ht / 80, 0, 0),
                         child: ElevatedButton(
                           onPressed: () {
                             if (_formKey.currentState!.validate()) {
                               ScaffoldMessenger.of(context).showSnackBar(
                                 const SnackBar(
-                                    content: Text('Data Saved')),
+                                    content: Text('Profile Updated')),
                               );
                               editData();
                               Navigator.push(
@@ -82,7 +82,6 @@ class EditProfilePage extends State<MyCustomForm> {
                                       builder: (context) =>
                                           Profile.ProfilePage()));
                             }
-                            
                           },
                           child: const Text('Save Changes'),
                         ),
@@ -109,7 +108,7 @@ class EditProfilePage extends State<MyCustomForm> {
                               if (value == null || value.isEmpty) {
                                 return 'Please enter some text';
                               }
-                              
+
                               // return null;
                             },
                             style: TextStyle(color: Colors.white),
