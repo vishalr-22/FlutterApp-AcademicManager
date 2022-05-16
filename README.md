@@ -12,6 +12,10 @@ classes (with lecture links), your assignments and submissions.
 This app also provides a Todo list for Task Management and event 
 handling using a calender.
 
+# Contributers 
+- Piyush Sharma (1911104)
+- R. Vishal (1911107)
+- Kush Patel (1911101)
 
 This application is being developed as a mini project under 
 course **Mobile Application Development using Flutter**
